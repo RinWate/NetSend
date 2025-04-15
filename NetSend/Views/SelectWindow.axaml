@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450" Width="400" Height="450"
+        x:Class="NetSend.SelectWindow"
+		x:DataType="vm:SelectWindowViewModel"
+		WindowStartupLocation="CenterOwner"
+		Icon="/Assets/avalonia-logo.ico"
+        Title="Выбор адресата">
+	<Grid RowDefinitions="auto, *" Margin="5">
+		<Grid ColumnDefinitions="auto, *, auto">
+			<Button Grid.Column="0" Content="Выбрать"></Button>
+			<TextBox Grid.Column="2" 
+					 Width="200"
+					 Watermark="Поиск..."></TextBox>
+		</Grid>
+		<ListBox HorizontalAlignment="Stretch"
+				 VerticalAlignment="Stretch"></ListBox>
+	</Grid>
+</Window>

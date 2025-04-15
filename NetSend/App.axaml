@@ -1,0 +1,18 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:semi="https://irihi.tech/semi"
+			 xmlns:ursa="https://irihi.tech/ursa/themes/semi"
+             x:Class="NetSend.App"
+             xmlns:local="using:NetSend"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+		<semi:SemiTheme Locale="en-US"/>
+		<ursa:SemiTheme Locale="en-US"/>
+    </Application.Styles>
+</Application>
