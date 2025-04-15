@@ -36,9 +36,7 @@ namespace NetSend.Core {
 					if (pingResult.Status == IPStatus.Success) {
 						hostname = Dns.GetHostEntry(addr);
 						Global.recipients.Add(new Recipient(hostname.HostName, addr));
-						Dispatcher.UIThread.Post(() => {
-							log($"Найден: {hostname.HostName} : {addr}");
-						});
+						log($"Найден: {hostname.HostName} : {addr}");
 					}
 				} catch { }
 			});
