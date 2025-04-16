@@ -15,5 +15,8 @@ namespace NetSend.Models {
 			Address = address;
 		}
 
+		public override string? ToString() {
+			return $"{Hostname} : {Address}";
+		}
 	}
 }

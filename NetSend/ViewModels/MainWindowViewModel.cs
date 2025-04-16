@@ -1,30 +1,25 @@
 ﻿
-
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Models;
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ursa.Controls;
 
 namespace NetSend.ViewModels {
 	public partial class MainWindowViewModel : ViewModelBase {
 
 		[ObservableProperty]
-		private string _version;
-		[ObservableProperty]
 		private string _message;
 		[ObservableProperty]
-		private List<Recipient> _recipients;
-
+		private string _resultString;
+		[ObservableProperty]
+		private List<Recipient> _selectedRecipients;
 		public MainWindowViewModel() {
-			Version = Global.VERSION;
 			Message = string.Empty;
-			Recipients = new List<Recipient>();
+			SelectedRecipients = new List<Recipient>();
+			ResultString = "Сканирование не выполнялось";
 		}
 
 
@@ -32,7 +27,9 @@ namespace NetSend.ViewModels {
 		public void Scan() {
 			var newScan = new ScanWindow();
 			newScan.DataContext = new ScanWindowViewModel();
-			newScan.Show();
+
+			var mainWindow = Global.GetMainWindow();
+			newScan.ShowDialog(mainWindow);
 		}
 
 		[RelayCommand]
@@ -40,25 +37,29 @@ namespace NetSend.ViewModels {
 
 			bool isFilled = CheckFill();
 			if (!isFilled) {
-				MessageBox.ShowAsync("Не заполнено сообщение или не выбраны адресаты!", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
 				return;
 			}
 
-			var wind = new LongProcessWindow();
-			wind.DataContext = new LongProcessWindowViewModel("Отправка...");
-
-			var mainWindow = Global.GetMainWindow();
-			wind.ShowDialog(mainWindow!);
+			var sender = new Sender();
+			sender.Send(Message, Global.GetMainWindow());
 		}
 
 		[RelayCommand]
 		public void Send() {
+			bool isFilled = CheckFill();
+			if (!isFilled) {
+				MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				return;
+			}
 
+			var sender = new Sender();
+			sender.Send(Message, Global.GetMainWindow(), SelectedRecipients);
 		}
 
 		private bool CheckFill() {
 			bool MessageIsNull = string.IsNullOrWhiteSpace(Message);
-			bool RecipientsIsNull = Recipients.Count == 0;
+			bool RecipientsIsNull = Global.Recipients.Count == 0;
 			return !MessageIsNull && !RecipientsIsNull;
 		}
     }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NetSend.ViewModels {
-	public sealed class SelectWindowViewModel : ViewModelBase {
+	public partial class SelectWindowViewModel : ViewModelBase {
 
 
 	}

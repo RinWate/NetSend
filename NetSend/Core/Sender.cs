@@ -1,0 +1,46 @@
+﻿using Avalonia.Controls;
+using NetSend.Models;
+using NetSend.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NetSend.Core {
+	public class Sender {
+		
+		public Sender() { }
+
+		public void Send(string message, Window parent, List<Recipient>? recipients = null) {
+
+			var long_operation = new LongProcessWindow();
+			long_operation.DataContext = new LongProcessWindowViewModel("Отправка...");
+			long_operation.ShowDialog(parent);
+
+			List<Recipient> target_recipients;
+			if (recipients != null) {
+				target_recipients = recipients;
+			} else { 
+				target_recipients = Global.Recipients.ToList();
+			}
+
+			foreach (var recipient in target_recipients) {
+				var addr = recipient.Address;
+
+				var info = new ProcessStartInfo();
+				info.WorkingDirectory = "C:/Windows/System32/";
+				info.CreateNoWindow = true;
+				info.FileName = "msg.exe";
+				info.Arguments = $"* /SERVER:{addr} {message}";
+
+				Process.Start(info);
+			}
+
+			long_operation.Close();
+		}
+
+	}
+}

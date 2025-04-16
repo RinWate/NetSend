@@ -1,7 +1,9 @@
 ﻿using Avalonia.Threading;
 using NetSend.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -15,6 +17,8 @@ namespace NetSend.Core {
 				log("Не указан фильтр!");
 				return;
 			}
+			Global.Recipients.Clear();
+			var temp_list = new ConcurrentBag<Recipient>();
 			var stringIp = IPAddress.Parse(ip_filter);
 			var byteIp = stringIp.GetAddressBytes();
 
@@ -35,27 +39,17 @@ namespace NetSend.Core {
 					var pingResult = ping.Send(addr);
 					if (pingResult.Status == IPStatus.Success) {
 						hostname = Dns.GetHostEntry(addr);
-						Global.recipients.Add(new Recipient(hostname.HostName, addr));
-						log($"Найден: {hostname.HostName} : {addr}");
+						if (hostname != null) {
+							temp_list.Add(new Recipient(hostname.HostName, addr));
+							log($"Найден: {hostname.HostName} : {addr}");
+						}
 					}
 				} catch { }
 			});
-
-			//for (byte i = 0; i < 255; i++) {
-			//	byteIp[3] = i;
-
-			//	var addr = new IPAddress(byteIp);
-			//	var hostname = new IPHostEntry();
-			//	try {
-			//		var ping = new Ping();
-			//		var pingResult = ping.Send(addr, 1);
-			//		if (pingResult.Status == IPStatus.Success) {
-			//			hostname = Dns.GetHostEntry(addr);
-			//			Global.recipients.Add(new Recipient(hostname.HostName, addr));
-			//			log($"Найден: {hostname.HostName} : {addr}");
-			//		}
-			//	} catch {}
-			//}
+			var result = temp_list.OrderBy(a => a.Hostname).Distinct().ToList();
+			foreach (var temp in result) { 
+				Global.Recipients.Add(temp);
+			}
 		}
 	}
 }

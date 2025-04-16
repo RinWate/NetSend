@@ -1,14 +1,16 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:NetSend.ViewModels"
+		xmlns:local="clr-namespace:NetSend;assembly=NetSend"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450" Width="600" Height="450"
         x:Class="NetSend.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="NetSend via Windows Ping">
-
+		WindowStartupLocation="CenterScreen"
+        Title="NetSend via Windows Message">
+	
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
@@ -18,7 +20,7 @@
 			  ColumnDefinitions="auto, auto, auto">
 			<Button Grid.Column="0" 
 					Content="Сканировать"
-					Command="{Binding ScanCommand}"></Button>
+					Command="{Binding ScanCommand}"/>
 			<Button Grid.Column="1" 
 					Content="Отправить всем"
 					Command="{Binding SendAllCommand}"></Button>
@@ -26,14 +28,23 @@
 					Content="Отправить по адресу..."
 					Command="{Binding SendCommand}"></Button>
 		</Grid>
-		<TextBox Grid.Column="0" 
+		<TextBox Grid.Column="0"
 				 Grid.Row="1"
-				 Grid.ColumnSpan="2"
 				 VerticalAlignment="Stretch"
 				 VerticalContentAlignment="Stretch"
 				 TextAlignment="Start"
-				 Watermark="Сообщение..."/>
-		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Version}"></Label>
+				 Watermark="Сообщение..."
+				 Text="{Binding Message}"/>
+		<ListBox Grid.Column="1"
+				 Grid.Row="1"
+				 SelectionMode="Multiple"
+				 VerticalAlignment="Stretch"
+				 HorizontalAlignment="Stretch"
+				 SelectedItems="{Binding SelectedRecipients}"
+				 ItemsSource="{Binding Source={x:Static local:Global.Recipients}}">
+		</ListBox>
+		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>
+		<Label Grid.Column="1" Grid.Row="3" Content="{Binding ResultString}"/>
 	</Grid>
 	
 </Window>

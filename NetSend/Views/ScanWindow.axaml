@@ -38,7 +38,7 @@
 				 Width="175"
 				 Watermark="Фильтр подсети..."
 				 IsEnabled="{Binding !IsScanning}"
-				 ToolTip.Tip="Подсеть, которая будет просканирована. В формате 255.255.255.255"></TextBox>
+				 ToolTip.Tip="Подсеть, которая будет просканирована. В формате 255.255.255.0"></TextBox>
 		<TextBox Grid.Column="0"
 				 Grid.ColumnSpan="4"
 				 Grid.Row="1"

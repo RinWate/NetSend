@@ -3,9 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NetSend.ViewModels {
@@ -16,7 +15,7 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private bool _isScanning = false;
 		[ObservableProperty]
-		private int _threads = 16;
+		private int _threads = 32;
 
 		[RelayCommand]
 		public async Task Scan(string ipAddress) {
@@ -35,6 +34,7 @@ namespace NetSend.ViewModels {
 			DateTime endTime = DateTime.Now;
 			var timeResult = (endTime - startTime).TotalSeconds;
 			Log += $"Сканирование завершено за {timeResult:F2} сек." + Environment.NewLine;
+			Log += $"Данное окно можно закрыть" + Environment.NewLine;
 			IsScanning = false;
 		}
 
