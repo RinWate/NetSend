@@ -9,6 +9,7 @@ namespace NetSend {
 
 		public static readonly string VERSION = "v 1.0";
 		public static ObservableCollection<Recipient> Recipients { get; set; } = new ObservableCollection<Recipient>();
+		public static string StatusString { get; set; } = string.Empty;
 
 		public static Window? GetMainWindow() {
 			var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;

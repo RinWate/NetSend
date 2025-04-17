@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetSend.ViewModels {
-	public partial class SelectWindowViewModel : ViewModelBase {
-
-
-	}
+namespace NetSend.Models {
+	public record Filter(string filter);
 }

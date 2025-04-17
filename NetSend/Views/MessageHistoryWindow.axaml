@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600" Width="500" Height="600"
+        x:Class="NetSend.MessageHistoryWindow"
+		x:DataType="vm:MessageHistoryWindowViewModel"
+		Icon="/Assets/avalonia-logo.ico"
+		WindowStartupLocation="CenterScreen"
+        Title="История сообщений">
+	
+	<Grid RowDefinitions="auto, *"
+		  Margin="5"
+		  RowSpacing="5">
+		<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
+			<Button ToolTip.Tip="Скопировать текст сообщения" Padding="1" Command="{Binding CopyMessageCommand}">
+				<Image Source="/Assets/copyIcon.ico" Height="24"/>
+			</Button>
+			<Button Content="Очистить историю" Command="{Binding ClearHistoryCommand}"/>
+		</StackPanel>
+		<DataGrid Grid.Row="1"
+				  ColumnWidth="*"
+				  IsReadOnly="True"
+				  ItemsSource="{Binding Messages}"
+				  SelectionMode="Single"
+				  SelectedItem="{Binding SelectedMessage}"
+				  CanUserReorderColumns="False"
+				  CanUserResizeColumns="True"
+				  CanUserSortColumns="True">
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Скопировать текст" 
+							  Command="{Binding CopyMessageCommand}"
+							  HotKey="Ctrl+C"/>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
+
+			<DataGrid.Styles>
+				<Style Selector="TextBlock">
+					<Setter Property="TextWrapping" Value="Wrap"></Setter>
+					<Setter Property="FontSize" Value="12"></Setter>
+				</Style>
+			</DataGrid.Styles>
+			
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto"/>
+				<DataGridTextColumn Header="Дата" Binding="{Binding SendDate}" Width="auto"/>
+				<DataGridTextColumn Header="Отправитель" Binding="{Binding Sender}" Width="auto"/>
+				<DataGridTextColumn Header="Сообщение" Binding="{Binding Content}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+</Window>

@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
+	  <PublishAot>false</PublishAot>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -29,8 +30,8 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Irihi.Ursa" Version="1.10.0" />
     <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.10.0" />
+    <PackageReference Include="LiteDB" Version="5.0.21" />
     <PackageReference Include="Semi.Avalonia" Version="11.2.1.6" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.2.1.6" />
-    <PackageReference Include="System.DirectoryServices" Version="9.0.4" />
   </ItemGroup>
 </Project>

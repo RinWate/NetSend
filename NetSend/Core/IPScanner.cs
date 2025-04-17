@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -21,6 +22,7 @@ namespace NetSend.Core {
 			var temp_list = new ConcurrentBag<Recipient>();
 			var stringIp = IPAddress.Parse(ip_filter);
 			var byteIp = stringIp.GetAddressBytes();
+			var errors = new List<string>();
 
 			var parallelOptions = new ParallelOptions();
 			parallelOptions.MaxDegreeOfParallelism = threads;
@@ -44,12 +46,31 @@ namespace NetSend.Core {
 							log($"Найден: {hostname.HostName} : {addr}");
 						}
 					}
-				} catch { }
+				} catch (Exception e) { 
+					errors.Add($"{addr.ToString()}: {e.Message}");
+				}
 			});
-			var result = temp_list.OrderBy(a => a.Hostname).Distinct().ToList();
+			var result = temp_list.OrderBy(a => a.Hostname).Distinct(new AddressComparer()).ToList();
 			foreach (var temp in result) { 
 				Global.Recipients.Add(temp);
 			}
+			Logger.LogList(errors);
+		}
+	}
+
+	class AddressComparer : IEqualityComparer<Recipient> {
+		public bool Equals(Recipient? x, Recipient? y) {
+			if (x == null || y == null) return false;
+
+			if (ReferenceEquals(x, y)) return true;
+
+			return x.Address.GetHashCode() == y.Address.GetHashCode();
+		}
+
+		public int GetHashCode([DisallowNull] Recipient obj) {
+			if (obj == null) return 0;
+
+			return obj.Address.GetHashCode();
 		}
 	}
 }

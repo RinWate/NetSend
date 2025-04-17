@@ -1,8 +1,10 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +18,13 @@ namespace NetSend.ViewModels {
 		private bool _isScanning = false;
 		[ObservableProperty]
 		private int _threads = 32;
+		[ObservableProperty]
+		private List<string> _filters;
+
+		public ScanWindowViewModel() { 
+			var db = new Database();
+			Filters = db.GetAll();
+		}
 
 		[RelayCommand]
 		public async Task Scan(string ipAddress) {
@@ -36,6 +45,9 @@ namespace NetSend.ViewModels {
 			Log += $"Сканирование завершено за {timeResult:F2} сек." + Environment.NewLine;
 			Log += $"Данное окно можно закрыть" + Environment.NewLine;
 			IsScanning = false;
+
+			var db = new Database();
+			db.WriteNew(ipAddress);
 		}
 
 	}

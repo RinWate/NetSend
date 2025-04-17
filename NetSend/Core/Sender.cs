@@ -16,6 +16,7 @@ namespace NetSend.Core {
 
 		public void Send(string message, Window parent, List<Recipient>? recipients = null) {
 
+			var errors = new List<string>();
 			var long_operation = new LongProcessWindow();
 			long_operation.DataContext = new LongProcessWindowViewModel("Отправка...");
 			long_operation.ShowDialog(parent);
@@ -40,6 +41,8 @@ namespace NetSend.Core {
 			}
 
 			long_operation.Close();
+			var db = new Database();
+			db.WriteMessage(message);
 		}
 
 	}

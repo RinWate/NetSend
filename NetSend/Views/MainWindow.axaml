@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:NetSend.ViewModels"
 		xmlns:local="clr-namespace:NetSend;assembly=NetSend"
+		xmlns:ursa="https://irihi.tech/ursa"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450" Width="600" Height="450"
@@ -15,28 +16,47 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<Grid Margin="5" ColumnSpacing="5" RowSpacing="5" ColumnDefinitions="*,*" RowDefinitions="auto,*,auto">
-		<Grid ColumnSpacing="10" Grid.Column="0" Grid.ColumnSpan="2" 
+	<Grid Margin="5" ColumnSpacing="5" RowSpacing="5" ColumnDefinitions="*,*" RowDefinitions="auto,auto,*,auto">
+		<Menu FontSize="13">
+			<MenuItem Header="Файл">
+				<MenuItem Header="История сообщений" Command="{Binding OpenHistoryCommand}"></MenuItem>
+				<Separator/>
+				<MenuItem Header="О программе"></MenuItem>
+				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
+				<Separator/>
+				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
+			</MenuItem>
+			<MenuItem Header="Шаблоны" IsEnabled="False">
+				
+			</MenuItem>
+		</Menu>
+		<Grid ColumnSpacing="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
 			  ColumnDefinitions="auto, auto, auto">
-			<Button Grid.Column="0" 
+			<Button Grid.Column="0"
+					Grid.Row="1"
 					Content="Сканировать"
 					Command="{Binding ScanCommand}"/>
-			<Button Grid.Column="1" 
-					Content="Отправить всем"
-					Command="{Binding SendAllCommand}"></Button>
-			<Button Grid.Column="2" 
-					Content="Отправить по адресу..."
-					Command="{Binding SendCommand}"></Button>
+			<ursa:ButtonGroup Grid.Column="1" Grid.Row="1" Foreground="Aqua">
+				<Button Content="Отправить всем"
+						Command="{Binding SendAllCommand}"></Button>
+				<Button Content="Отправить по адресу..."
+						Command="{Binding SendCommand}"></Button>
+			</ursa:ButtonGroup>
+			<Button Grid.Column="2"
+					Content="История"
+					Command="{Binding OpenHistoryCommand}"/>
 		</Grid>
 		<TextBox Grid.Column="0"
-				 Grid.Row="1"
+				 Grid.Row="2"
 				 VerticalAlignment="Stretch"
 				 VerticalContentAlignment="Stretch"
 				 TextAlignment="Start"
+				 TextWrapping="Wrap"
 				 Watermark="Сообщение..."
 				 Text="{Binding Message}"/>
 		<ListBox Grid.Column="1"
-				 Grid.Row="1"
+				 Grid.Row="2"
+				 FontSize="12"
 				 SelectionMode="Multiple"
 				 VerticalAlignment="Stretch"
 				 HorizontalAlignment="Stretch"
@@ -44,7 +64,8 @@
 				 ItemsSource="{Binding Source={x:Static local:Global.Recipients}}">
 		</ListBox>
 		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>
-		<Label Grid.Column="1" Grid.Row="3" Content="{Binding ResultString}"/>
+		<Label Grid.Column="1" Grid.Row="3" Content="{Binding Source={x:Static local:Global.StatusString}}"/>
+
 	</Grid>
 	
 </Window>

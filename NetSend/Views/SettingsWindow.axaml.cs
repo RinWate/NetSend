@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace NetSend;
 
-public partial class SelectWindow : Window
+public partial class SettingsWindow : Window
 {
-    public SelectWindow()
+    public SettingsWindow()
     {
         InitializeComponent();
     }

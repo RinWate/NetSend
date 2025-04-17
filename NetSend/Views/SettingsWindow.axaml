@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
+		xmlns:ursa="https://irihi.tech/ursa"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="{Binding Height, ElementName=Core}" Width="400" Height="{Binding Height, ElementName=Core}"
+        x:Class="NetSend.SettingsWindow"
+		x:DataType="vm:SettingsWindowViewModel"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False"
+		Icon="/Assets/avalonia-logo.ico"
+        Title="Настройки">
+
+		<Grid Margin="5" 
+			  Name="Core"
+			  ShowGridLines="True"
+			  RowDefinitions="*, auto"
+			  Height="100">
+			<StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Spacing="5">
+				<StackPanel Orientation="Horizontal" Spacing="5">
+					<Label Content="Путь до базы данных:"/>
+					<HyperlinkButton Content="?">
+						<HyperlinkButton.Flyout>
+							<Flyout>
+								<StackPanel Width="300">
+									<TextBlock TextWrapping="Wrap" Text="В базе данных хранится история сообщений, введённых фильтров и т.д. Если не выбрана, то будет создана база в папке с программой"></TextBlock>
+								</StackPanel>
+							</Flyout>
+						</HyperlinkButton.Flyout>
+					</HyperlinkButton>
+				</StackPanel>
+				<ursa:PathPicker AllowMultiple="False"
+								 FileFilter="[Кэш,*.litedb]"
+								 UsePickerType="OpenFile"
+								 SelectedPathsText="{Binding SelectedPath}"
+								 Title="..."></ursa:PathPicker>
+			</StackPanel>
+			<Button Grid.Row="1"
+					Content="Сохранить"/>
+		</Grid>
+</Window>

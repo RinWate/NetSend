@@ -13,13 +13,12 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private string _message;
 		[ObservableProperty]
-		private string _resultString;
-		[ObservableProperty]
 		private List<Recipient> _selectedRecipients;
 		public MainWindowViewModel() {
 			Message = string.Empty;
 			SelectedRecipients = new List<Recipient>();
-			ResultString = "Сканирование не выполнялось";
+
+			Global.StatusString = "Сканирование не выполнялось";
 		}
 
 
@@ -43,6 +42,7 @@ namespace NetSend.ViewModels {
 
 			var sender = new Sender();
 			sender.Send(Message, Global.GetMainWindow());
+			Global.StatusString = "Сообщение отправлено";
 		}
 
 		[RelayCommand]
@@ -55,6 +55,28 @@ namespace NetSend.ViewModels {
 
 			var sender = new Sender();
 			sender.Send(Message, Global.GetMainWindow(), SelectedRecipients);
+		}
+
+		[RelayCommand]
+		public void OpenHistory() {
+			var newWindow = new MessageHistoryWindow();
+			newWindow.DataContext = new MessageHistoryWindowViewModel();
+			var mainWindow = Global.GetMainWindow();
+			newWindow.ShowDialog(mainWindow);
+		}
+
+		[RelayCommand]
+		public void OpenSettings() {
+			var newWindow = new SettingsWindow();
+			newWindow.DataContext = new SettingsWindowViewModel();
+			var mainWindow = Global.GetMainWindow();
+			newWindow.ShowDialog(mainWindow);
+		}
+
+		[RelayCommand]
+		public void Exit() {
+			var mainWindow = Global.GetMainWindow();
+			mainWindow.Close();
 		}
 
 		private bool CheckFill() {

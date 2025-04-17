@@ -4,7 +4,7 @@
 			 xmlns:ursa="https://irihi.tech/ursa/themes/semi"
              x:Class="NetSend.App"
              xmlns:local="using:NetSend"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
@@ -12,6 +12,7 @@
     </Application.DataTemplates>
   
     <Application.Styles>
+		<StyleInclude Source="avares://Semi.Avalonia.DataGrid/Index.axaml"/>
 		<semi:SemiTheme Locale="en-US"/>
 		<ursa:SemiTheme Locale="en-US"/>
     </Application.Styles>
