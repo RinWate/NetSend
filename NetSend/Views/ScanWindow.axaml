@@ -19,7 +19,8 @@
 				Name="ScanButton"
 				Content="Сканировать"
 				Command="{Binding ScanCommand}"
-				CommandParameter="{Binding Text, ElementName=Mask}"/>
+				CommandParameter="{Binding Text, ElementName=Mask}">
+		</Button>
 		<StackPanel Grid.Column="1"
 					Spacing="5"
 					Orientation="Horizontal">

@@ -14,29 +14,51 @@
 
 		<Grid Margin="5" 
 			  Name="Core"
-			  ShowGridLines="True"
 			  RowDefinitions="*, auto"
-			  Height="100">
-			<StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Spacing="5">
-				<StackPanel Orientation="Horizontal" Spacing="5">
-					<Label Content="Путь до базы данных:"/>
-					<HyperlinkButton Content="?">
-						<HyperlinkButton.Flyout>
-							<Flyout>
-								<StackPanel Width="300">
-									<TextBlock TextWrapping="Wrap" Text="В базе данных хранится история сообщений, введённых фильтров и т.д. Если не выбрана, то будет создана база в папке с программой"></TextBlock>
-								</StackPanel>
-							</Flyout>
-						</HyperlinkButton.Flyout>
-					</HyperlinkButton>
+			  Height="300">
+			<StackPanel Margin="5" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Spacing="10">
+				<StackPanel Name="Common" Spacing="5">
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<CheckBox Name="CommonBase" Content="Общая база настроек"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="В общей базе хранятся настройки программы, введенные фильтры и получатели. Если не задано, то будет создана база в каталоге программы"/>
+					</StackPanel>
+					<ursa:PathPicker AllowMultiple="False"
+									 FileFilter="[Кэш,*.litedb]"
+									 IsEnabled="{Binding IsChecked, ElementName=CommonBase}"
+									 UsePickerType="OpenFile"
+									 SelectedPathsText="{Binding SelectedCommonBase}"
+									 Title="..."></ursa:PathPicker>
 				</StackPanel>
-				<ursa:PathPicker AllowMultiple="False"
-								 FileFilter="[Кэш,*.litedb]"
-								 UsePickerType="OpenFile"
-								 SelectedPathsText="{Binding SelectedPath}"
-								 Title="..."></ursa:PathPicker>
+				
+				<StackPanel Name="Setting" Spacing="5">
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<CheckBox Name="MessageBase" Content="Общая база сообщений"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="Тут всё очевидно. Просто общая база сообщений :)"/>
+					</StackPanel>
+					<ursa:PathPicker AllowMultiple="False"
+									 FileFilter="[Настройки,*.litedb]"
+									 IsEnabled="{Binding IsChecked, ElementName=MessageBase}"
+									 UsePickerType="OpenFile"
+									 SelectedPathsText="{Binding SelectedSettingsBase}"
+									 Title="..."/>
+				</StackPanel>
+
+				<StackPanel>
+					<StackPanel Spacing="5">
+						<CheckBox Content="Фильтр по-умолчанию:" Name="DefaultFilter"/>
+						<TextBox Text="{Binding DefaultFilter}" IsEnabled="{Binding IsChecked, ElementName=DefaultFilter}"/>
+					</StackPanel>
+				</StackPanel>
 			</StackPanel>
-			<Button Grid.Row="1"
-					Content="Сохранить"/>
+
+			<StackPanel Grid.Row="1"
+						Margin="0 0 0 5"
+						Spacing="10" 
+						Orientation="Horizontal" 
+						HorizontalAlignment="Center" 
+						VerticalAlignment="Stretch">
+				<Button Content="Сохранить"/>
+			</StackPanel>
+
 		</Grid>
 </Window>

@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Ursa.Controls;
 
 namespace NetSend.ViewModels {
@@ -25,7 +24,7 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public void Scan() {
 			var newScan = new ScanWindow();
-			newScan.DataContext = new ScanWindowViewModel();
+			newScan.DataContext = new ScanWindowViewModel(newScan);
 
 			var mainWindow = Global.GetMainWindow();
 			newScan.ShowDialog(mainWindow);
@@ -58,11 +57,20 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
+		public void SendToAddress() {
+			bool isFilled = !string.IsNullOrEmpty(Message);
+			if (!isFilled) {
+				MessageBox.ShowAsync("Не заполнено сообщение!", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				return;
+			}
+		}
+
+		[RelayCommand]
 		public void OpenHistory() {
 			var newWindow = new MessageHistoryWindow();
-			newWindow.DataContext = new MessageHistoryWindowViewModel();
+			newWindow.DataContext = new MessageHistoryWindowViewModel(this);
 			var mainWindow = Global.GetMainWindow();
-			newWindow.ShowDialog(mainWindow);
+			newWindow.Show(mainWindow);
 		}
 
 		[RelayCommand]

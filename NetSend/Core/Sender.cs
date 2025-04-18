@@ -8,18 +8,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ursa.Controls;
 
 namespace NetSend.Core {
 	public class Sender {
 		
 		public Sender() { }
 
-		public void Send(string message, Window parent, List<Recipient>? recipients = null) {
+		public async void Send(string message, Window parent, List<Recipient>? recipients = null) {
 
 			var errors = new List<string>();
+			var tasks = new List<Task>();
 			var long_operation = new LongProcessWindow();
 			long_operation.DataContext = new LongProcessWindowViewModel("Отправка...");
-			long_operation.ShowDialog(parent);
+			_ = long_operation.ShowDialog(parent);
 
 			List<Recipient> target_recipients;
 			if (recipients != null) {
@@ -37,8 +39,10 @@ namespace NetSend.Core {
 				info.FileName = "msg.exe";
 				info.Arguments = $"* /SERVER:{addr} {message}";
 
-				Process.Start(info);
+				tasks.Add(Process.Start(info)!.WaitForExitAsync());
 			}
+
+			await Task.WhenAll(tasks);
 
 			long_operation.Close();
 			var db = new Database();

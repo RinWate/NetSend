@@ -5,10 +5,12 @@
 		xmlns:ursa="https://irihi.tech/ursa"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450" Width="600" Height="450"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450" Width="600" Height="500"
         x:Class="NetSend.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
+		MinWidth="580"
+		MinHeight="250"
 		WindowStartupLocation="CenterScreen"
         Title="NetSend via Windows Message">
 	
@@ -21,7 +23,7 @@
 			<MenuItem Header="Файл">
 				<MenuItem Header="История сообщений" Command="{Binding OpenHistoryCommand}"></MenuItem>
 				<Separator/>
-				<MenuItem Header="О программе"></MenuItem>
+				<MenuItem Header="О программе" IsEnabled="False"></MenuItem>
 				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
 				<Separator/>
 				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
@@ -36,17 +38,26 @@
 					Grid.Row="1"
 					Content="Сканировать"
 					Command="{Binding ScanCommand}"/>
-			<ursa:ButtonGroup Grid.Column="1" Grid.Row="1" Foreground="Aqua">
+			<SplitButton Grid.Column="1" Grid.Row="1" Content="Отправить всем" Command="{Binding SendAllCommand}">
+				<SplitButton.Flyout>
+					<MenuFlyout>
+						<MenuItem Header="Выбранным" Command="{Binding SendCommand}"/>
+						<MenuItem Header="По адресу..." IsEnabled="False"/>
+					</MenuFlyout>
+				</SplitButton.Flyout>
+			</SplitButton>
+			<ursa:ButtonGroup Grid.Column="1" Grid.Row="1" Foreground="Aqua" IsVisible="False">
 				<Button Content="Отправить всем"
 						Command="{Binding SendAllCommand}"></Button>
-				<Button Content="Отправить по адресу..."
+				<Button Content="Отправить выбранным"
 						Command="{Binding SendCommand}"></Button>
 			</ursa:ButtonGroup>
 			<Button Grid.Column="2"
 					Content="История"
-					Command="{Binding OpenHistoryCommand}"/>
+					Command="{Binding OpenHistoryCommand}">
+			</Button>
 		</Grid>
-		<TextBox Grid.Column="0"
+		<TextBox Grid.Column="1"
 				 Grid.Row="2"
 				 VerticalAlignment="Stretch"
 				 VerticalContentAlignment="Stretch"
@@ -54,15 +65,27 @@
 				 TextWrapping="Wrap"
 				 Watermark="Сообщение..."
 				 Text="{Binding Message}"/>
-		<ListBox Grid.Column="1"
-				 Grid.Row="2"
-				 FontSize="12"
-				 SelectionMode="Multiple"
-				 VerticalAlignment="Stretch"
-				 HorizontalAlignment="Stretch"
-				 SelectedItems="{Binding SelectedRecipients}"
-				 ItemsSource="{Binding Source={x:Static local:Global.Recipients}}">
-		</ListBox>
+		<Grid Grid.Column="0"
+			  Grid.Row="2"
+			  RowDefinitions="*, auto">
+			<ListBox Grid.Row="0"
+					 FontSize="12"
+					 SelectionMode="Multiple"
+					 IsTextSearchEnabled="True"
+					 VerticalAlignment="Stretch"
+					 HorizontalAlignment="Stretch"
+					 SelectedItems="{Binding SelectedRecipients}"
+					 ItemsSource="{Binding Source={x:Static local:Global.Recipients}}">
+				<ListBox.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Установить псевдоним..." ToolTip.Tip="Псевдоним будет отображаться вместо доменного имени"/>
+						<MenuItem Header="Игнорировать" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
+					</ContextMenu>
+				</ListBox.ContextMenu>
+			</ListBox>
+			<TextBox Name="Filter" Grid.Row="1" Watermark="Поиск..." IsEnabled="False"/>
+		</Grid>
+
 		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>
 		<Label Grid.Column="1" Grid.Row="3" Content="{Binding Source={x:Static local:Global.StatusString}}"/>
 

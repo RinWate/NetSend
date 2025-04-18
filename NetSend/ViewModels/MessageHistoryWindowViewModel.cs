@@ -17,9 +17,17 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private Message _selectedMessage = new Message();
 
+		private MainWindowViewModel? _mainViewModel;
+
 		public MessageHistoryWindowViewModel() { 
 			var db = new Database();
 			Messages = new ObservableCollection<Message>(db.AllMessages());
+		}
+
+		public MessageHistoryWindowViewModel(MainWindowViewModel mainViewModel) {
+			var db = new Database();
+			Messages = new ObservableCollection<Message>(db.AllMessages());
+			_mainViewModel = mainViewModel;
 		}
 
 		[RelayCommand]
@@ -32,9 +40,22 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public async Task CopyMessage() {
 			var mainWindow = Global.GetMainWindow();
-			var clipboard = mainWindow.Clipboard;
+			var clipboard = mainWindow!.Clipboard;
 
-			await clipboard.SetTextAsync(SelectedMessage.Content);
+			await clipboard!.SetTextAsync(SelectedMessage.Content);
+		}
+
+		[RelayCommand]
+		public void CopyMessageToMainWindow() {
+			if (_mainViewModel != null)
+				_mainViewModel.Message = SelectedMessage.Content;
+		}
+
+		[RelayCommand]
+		public void DeleteMessage() {
+			var db = new Database();
+			db.DeleteMessage(SelectedMessage.Id);
+			Messages.Remove(SelectedMessage);
 		}
 
 	}

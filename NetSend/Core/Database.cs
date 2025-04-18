@@ -7,11 +7,13 @@ using System.Linq;
 namespace NetSend.Core {
 	public class Database {
 
-		private readonly string _databaseName = "data.litedb";
+		private readonly string _settingsDb = "settings.litedb";
+		private readonly string _pseudoNamesDb = "pseudo.litedb";
+		private readonly string _dataDb = "data.litedb";
 
 		#region Messages
 		public void WriteMessage(string message) { 
-			using (var db = new LiteDatabase(_databaseName)) {
+			using (var db = new LiteDatabase(_dataDb)) {
 				var col = db.GetCollection<Message>("messages");
 				var messages = new List<Message> {
 					new Message(message)
@@ -22,7 +24,7 @@ namespace NetSend.Core {
 		}
 
 		public List<Message> AllMessages() {
-			using (var db = new LiteDatabase(_databaseName)) {
+			using (var db = new LiteDatabase(_dataDb)) {
 				var col = db.GetCollection<Message>("messages");
 				var messages = col.FindAll().OrderByDescending(a => a.SendDate).ToList();
 				return messages;
@@ -30,9 +32,16 @@ namespace NetSend.Core {
 		}
 
 		public void ClearMessages() {
-			using (var db = new LiteDatabase(_databaseName)) {
+			using (var db = new LiteDatabase(_dataDb)) {
 				var col = db.GetCollection<Message>("messages");
 				col.DeleteAll();
+			}
+		}
+
+		public void DeleteMessage(int id) {
+			using (var db = new LiteDatabase(_dataDb)) {
+				var col = db.GetCollection<Message>("messages");
+				col.Delete(id);
 			}
 		}
 		#endregion
@@ -41,7 +50,7 @@ namespace NetSend.Core {
 
 		public void WriteNew(string filter_string) {
 			var filter = new Filter(filter_string);
-			using (var db = new LiteDatabase(_databaseName)) {
+			using (var db = new LiteDatabase(_dataDb)) {
 				var col = db.GetCollection<Filter>("filters");
 				var filters = new List<Filter>() { filter };
 
@@ -51,7 +60,7 @@ namespace NetSend.Core {
 		}
 
 		public List<string> GetAll() {
-			using (var db = new LiteDatabase(_databaseName)) {
+			using (var db = new LiteDatabase(_dataDb)) {
 				var col = db.GetCollection<Filter>("filters");
 				var result = new List<string>();
 				foreach (var filter in col.FindAll()) { 

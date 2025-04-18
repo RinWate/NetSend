@@ -26,6 +26,12 @@ namespace NetSend.ViewModels {
 			Filters = db.GetAll();
 		}
 
+		public ScanWindowViewModel(Window parent) {
+			var db = new Database();
+			Filters = db.GetAll();
+			window = parent;
+		}
+
 		[RelayCommand]
 		public async Task Scan(string ipAddress) {
 			IsScanning = true;
@@ -42,12 +48,11 @@ namespace NetSend.ViewModels {
 			});
 			DateTime endTime = DateTime.Now;
 			var timeResult = (endTime - startTime).TotalSeconds;
-			Log += $"Сканирование завершено за {timeResult:F2} сек." + Environment.NewLine;
-			Log += $"Данное окно можно закрыть" + Environment.NewLine;
 			IsScanning = false;
 
 			var db = new Database();
 			db.WriteNew(ipAddress);
+			window?.Close();
 		}
 
 	}

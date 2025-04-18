@@ -30,9 +30,14 @@
 				  CanUserSortColumns="True">
 			<DataGrid.ContextMenu>
 				<ContextMenu>
-					<MenuItem Header="Скопировать текст" 
+					<MenuItem Header="Скопировать сообщение в буфер обмена" 
 							  Command="{Binding CopyMessageCommand}"
 							  HotKey="Ctrl+C"/>
+					<MenuItem Header="Скопировать сообщение в главное окно"
+							  Command="{Binding CopyMessageToMainWindowCommand}"/>
+					<MenuItem Header="Удалить"
+							  Command="{Binding DeleteMessageCommand}"
+							  HotKey="Delete"/>
 				</ContextMenu>
 			</DataGrid.ContextMenu>
 
