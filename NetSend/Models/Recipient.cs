@@ -3,7 +3,7 @@ using System.Net;
 
 namespace NetSend.Models {
 	public class Recipient : ObservableObject {
-
+		public int Id { get; set; }
 		public string PseudoName { get; set; } = string.Empty;
 		public string Hostname { get; set; } = string.Empty;
 		public IPAddress Address { get; set; } = IPAddress.None;
@@ -20,7 +20,7 @@ namespace NetSend.Models {
 		}
 
 		public override string? ToString() {
-			if (string.IsNullOrEmpty(PseudoName)) return $"{Hostname} : {Address}";
+			if (string.IsNullOrWhiteSpace(PseudoName)) return $"{Hostname} : {Address}";
 			return $"{PseudoName} : {Address}";
 		}
 	}

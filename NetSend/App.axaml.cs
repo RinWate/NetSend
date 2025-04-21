@@ -1,9 +1,12 @@
+using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using NetSend.Core;
+using NetSend.Models;
 using NetSend.ViewModels;
 using NetSend.Views;
 
@@ -20,8 +23,10 @@ namespace NetSend
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
+                Settings.RegisterAdditionalMappings();
+                Settings.LoadSettings();
+                Settings.ReloadRecipients();
+
                 DisableAvaloniaDataAnnotationValidation();
                 desktop.MainWindow = new MainWindow
                 {

@@ -15,38 +15,51 @@
 		<Grid Margin="5" 
 			  Name="Core"
 			  RowDefinitions="*, auto"
-			  Height="300">
+			  Height="350">
 			<StackPanel Margin="5" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Spacing="10">
 				<StackPanel Name="Common" Spacing="5">
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<CheckBox Name="CommonBase" Content="Общая база настроек"/>
-						<HyperlinkButton Content="?" ToolTip.Tip="В общей базе хранятся настройки программы, введенные фильтры и получатели. Если не задано, то будет создана база в каталоге программы"/>
+						<CheckBox Name="CommonBase" Content="Общая база данных" IsChecked="{Binding CommonBase.isEnabled}"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения получателей и отправленных сообщений. Если не задано, то будет создана база в каталоге программы"/>
 					</StackPanel>
 					<ursa:PathPicker AllowMultiple="False"
 									 FileFilter="[Кэш,*.litedb]"
 									 IsEnabled="{Binding IsChecked, ElementName=CommonBase}"
 									 UsePickerType="OpenFile"
-									 SelectedPathsText="{Binding SelectedCommonBase}"
+									 SelectedPathsText="{Binding CommonBase.Value}"
 									 Title="..."></ursa:PathPicker>
 				</StackPanel>
 				
 				<StackPanel Name="Setting" Spacing="5">
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<CheckBox Name="MessageBase" Content="Общая база сообщений"/>
-						<HyperlinkButton Content="?" ToolTip.Tip="Тут всё очевидно. Просто общая база сообщений :)"/>
+						<CheckBox Name="SettingsBase" Content="Общая база настроек" IsChecked="{Binding SettingsBase.isEnabled}"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения настроек приложения. Если не задана, будет создана в каталоге программы"/>
 					</StackPanel>
 					<ursa:PathPicker AllowMultiple="False"
 									 FileFilter="[Настройки,*.litedb]"
-									 IsEnabled="{Binding IsChecked, ElementName=MessageBase}"
+									 IsEnabled="{Binding IsChecked, ElementName=SettingsBase}"
 									 UsePickerType="OpenFile"
-									 SelectedPathsText="{Binding SelectedSettingsBase}"
+									 SelectedPathsText="{Binding SettingsBase.Value}"
 									 Title="..."/>
 				</StackPanel>
 
+				<StackPanel Spacing="5">
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<CheckBox Name="PseudoNames" Content="Общая база имен" IsChecked="{Binding PseudoNamesBase.isEnabled}"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения псевдонимов получателей. Если не задана, будет создана в каталоге программы"/>
+					</StackPanel>
+					<ursa:PathPicker AllowMultiple="False"
+									 FileFilter="[Сообщения,*.litedb]"
+									 IsEnabled="{Binding IsChecked, ElementName=PseudoNames}"
+									 UsePickerType="OpenFile"
+									 SelectedPathsText="{Binding PseudoNamesBase.Value}"
+									 Title="..."/>
+				</StackPanel>
+				
 				<StackPanel>
 					<StackPanel Spacing="5">
-						<CheckBox Content="Фильтр по-умолчанию:" Name="DefaultFilter"/>
-						<TextBox Text="{Binding DefaultFilter}" IsEnabled="{Binding IsChecked, ElementName=DefaultFilter}"/>
+						<CheckBox Content="Фильтр по-умолчанию:" Name="DefaultFilter" IsChecked="{Binding DefaultFilter.isEnabled}"/>
+						<TextBox Text="{Binding DefaultFilter.Value}" IsEnabled="{Binding IsChecked, ElementName=DefaultFilter}"/>
 					</StackPanel>
 				</StackPanel>
 			</StackPanel>
@@ -57,7 +70,7 @@
 						Orientation="Horizontal" 
 						HorizontalAlignment="Center" 
 						VerticalAlignment="Stretch">
-				<Button Content="Сохранить"/>
+				<Button Content="Сохранить" Command="{Binding SaveSettingsCommand}"/>
 			</StackPanel>
 
 		</Grid>

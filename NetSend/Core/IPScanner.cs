@@ -54,6 +54,8 @@ namespace NetSend.Core {
 			foreach (var temp in result) { 
 				Global.Recipients.Add(temp);
 			}
+
+			new Database().WriteRecipients(result);
 			Logger.LogList(errors);
 		}
 	}

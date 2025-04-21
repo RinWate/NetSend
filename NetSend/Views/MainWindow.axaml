@@ -75,15 +75,17 @@
 					 VerticalAlignment="Stretch"
 					 HorizontalAlignment="Stretch"
 					 SelectedItems="{Binding SelectedRecipients}"
-					 ItemsSource="{Binding Source={x:Static local:Global.Recipients}}">
+					 ItemsSource="{Binding FilteredItems}">
 				<ListBox.ContextMenu>
 					<ContextMenu>
-						<MenuItem Header="Установить псевдоним..." ToolTip.Tip="Псевдоним будет отображаться вместо доменного имени"/>
-						<MenuItem Header="Игнорировать" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
+						<MenuItem Header="Установить псевдоним..."
+								  Command="{Binding SetPseudoNameCommand}"
+								  ToolTip.Tip="Псевдоним будет отображаться вместо доменного имени"/>
+						<MenuItem Header="Игнорировать" IsEnabled="False" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
 					</ContextMenu>
 				</ListBox.ContextMenu>
 			</ListBox>
-			<TextBox Name="Filter" Grid.Row="1" Watermark="Поиск..." IsEnabled="False"/>
+			<TextBox Name="Filter" Grid.Row="1" Watermark="Поиск..." Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 		</Grid>
 
 		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>

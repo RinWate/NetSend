@@ -39,6 +39,7 @@
 							  Name="Mask"
 							  Width="150"
 							  Watermark="Фильтр подсети..."
+							  Text="{Binding Filter}"
 							  IsEnabled="{Binding !IsScanning}"
 							  ItemsSource="{Binding Filters}"
 							  ToolTip.Tip="Подсеть, которая будет просканирована. В формате 255.255.255.0">

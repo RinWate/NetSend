@@ -1,12 +1,10 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
+using NetSend.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NetSend.ViewModels {
@@ -20,16 +18,17 @@ namespace NetSend.ViewModels {
 		private int _threads = 32;
 		[ObservableProperty]
 		private List<string> _filters;
+		[ObservableProperty]
+		private string _filter = string.Empty;
 
-		public ScanWindowViewModel() { 
+		public ScanWindowViewModel(Window? parent = null) {
 			var db = new Database();
-			Filters = db.GetAll();
-		}
+			Filters = db.GetAllFilters();
 
-		public ScanWindowViewModel(Window parent) {
-			var db = new Database();
-			Filters = db.GetAll();
-			window = parent;
+			Settings.GetValue("DefaultFilter", out string value);
+			Filter = value;
+
+			if (parent != null) window = parent;
 		}
 
 		[RelayCommand]
@@ -51,7 +50,7 @@ namespace NetSend.ViewModels {
 			IsScanning = false;
 
 			var db = new Database();
-			db.WriteNew(ipAddress);
+			db.WriteFilter(ipAddress);
 			window?.Close();
 		}
 
