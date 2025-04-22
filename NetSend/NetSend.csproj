@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
 	<PublishAot>false</PublishAot>
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
-	<PublishTrimmed>false</PublishTrimmed>
+	<PublishTrimmed>true</PublishTrimmed>
 	<TrimMode>partial</TrimMode>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>

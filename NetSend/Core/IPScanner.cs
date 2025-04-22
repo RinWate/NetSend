@@ -14,10 +14,6 @@ namespace NetSend.Core {
 	public class IPScanner {
 
 		public void Scan(string ip_filter, int threads, Action<string> log) {
-			if (ip_filter == null) {
-				log("Не указан фильтр!");
-				return;
-			}
 			Global.Recipients.Clear();
 			var temp_list = new ConcurrentBag<Recipient>();
 			var stringIp = IPAddress.Parse(ip_filter);

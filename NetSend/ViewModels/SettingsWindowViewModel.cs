@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
@@ -6,6 +7,9 @@ using NetSend.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +20,7 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private Setting _commonBase = new Setting("CommonBase", string.Empty, false);
 		[ObservableProperty]
-		private Setting _settingsBase = new Setting("SettingsBase", string.Empty, false);
+		private Setting _templatesBase = new Setting("TemplatesBase", string.Empty, false);
 		[ObservableProperty]
 		private Setting _pseudoNamesBase = new Setting("PseudoNamesBase", string.Empty, false);
 		[ObservableProperty]
@@ -30,7 +34,7 @@ namespace NetSend.ViewModels {
 		public void SaveSettings() {
 			var settings = new List<Setting>() {
 				CommonBase,
-				SettingsBase,
+				TemplatesBase,
 				PseudoNamesBase,
 				DefaultFilter
 			};
@@ -43,15 +47,18 @@ namespace NetSend.ViewModels {
 
 			if (settings != null && settings.Count > 0) {
 				CommonBase = Settings.FindSetting("CommonBase") ??			new Setting();
-				SettingsBase = Settings.FindSetting("SettingsBase") ??		new Setting();
+				TemplatesBase = Settings.FindSetting("SettingsBase") ??		new Setting();
 				PseudoNamesBase = Settings.FindSetting("PseudoNamesBase") ??new Setting();
 				DefaultFilter = Settings.FindSetting("DefaultFilter") ??	new Setting();
 			}
 		}
 
-		protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-
-			base.OnPropertyChanged(e);
+		[RelayCommand]
+		public void OpenProgramCatalog() {
+			var directory = Directory.GetCurrentDirectory();
+			if (Directory.Exists(directory)) { 
+				Process.Start("explorer.exe", directory);
+			}
 		}
 	}
 }

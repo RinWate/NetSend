@@ -22,7 +22,7 @@ namespace NetSend.ViewModels {
 
 		private string _searchText = string.Empty;
 		[ObservableProperty]
-		private ObservableCollection<Recipient> _filteredItems;
+		private ObservableCollection<Recipient> _filteredItems = new ObservableCollection<Recipient>();
 
 		public string SearchText {
 			get => _searchText;
@@ -35,15 +35,17 @@ namespace NetSend.ViewModels {
 			}
 		}
 
-		public void FilterRecipients() {
+		private void FilterRecipients() {
 			if (string.IsNullOrWhiteSpace(SearchText)) {
 				FilteredItems = new ObservableCollection<Recipient>(Global.Recipients);
 			} else {
 				var lower = SearchText.ToLower();
 				try {
-					var filtered = Global.Recipients.Where(item => item.Hostname.ToLower().Contains(lower) || item.PseudoName.ToLower().Contains(lower));
+					var filtered = Global.Recipients.Where(item => item.PseudoName.ToLower().Contains(lower) || item.Hostname.ToLower().Contains(lower));
 					FilteredItems = new ObservableCollection<Recipient>(filtered);
-				} catch { }
+				} catch {
+					Console.WriteLine();
+				}
 			}
 		}
 
@@ -51,7 +53,7 @@ namespace NetSend.ViewModels {
 			Message = string.Empty;
 			SelectedRecipients = new List<Recipient>();
 
-			FilteredItems = new ObservableCollection<Recipient>(Global.Recipients);
+			FilterRecipients();
 
 			Global.StatusString = "Сканирование не выполнялось";
 		}
@@ -69,10 +71,35 @@ namespace NetSend.ViewModels {
 			if (result != null && result is string) { 
 				selectedRecipient.PseudoName = result as string;
 				Settings.ReloadRecipients();
-				FilteredItems = new ObservableCollection<Recipient>(Global.Recipients);
+				FilterRecipients();
 			}
 		}
 
+		[RelayCommand]
+		public void ClearPseudoName() {
+			var selectedRecipient = SelectedRecipients[0];
+			new Database().WritePseudoName(selectedRecipient.Address, string.Empty);
+			Settings.ReloadRecipients();
+			FilterRecipients();
+		}
+
+		[RelayCommand]
+		public void AddInFavourite() {
+			var selectedRecipient = SelectedRecipients[0];
+			selectedRecipient.IsFavourite = true;
+			new Database().SetFavourite(selectedRecipient.Address);
+			Settings.ReloadRecipients();
+			FilterRecipients();
+		}
+
+		[RelayCommand]
+		public void RemoveInFavourite() {
+			var selectedRecipient = SelectedRecipients[0];
+			selectedRecipient.IsFavourite = false;
+			new Database().ClearFavourite(selectedRecipient.Address);
+			Settings.ReloadRecipients();
+			FilterRecipients();
+		}
 
 		[RelayCommand]
 		public async Task Scan() {
@@ -82,21 +109,31 @@ namespace NetSend.ViewModels {
 			var mainWindow = Global.GetMainWindow();
 			await newScan.ShowDialog(mainWindow);
 
-			FilteredItems = new ObservableCollection<Recipient>(Global.Recipients);
+			Settings.ReloadRecipients();
+			FilterRecipients();
 		}
 
 		[RelayCommand]
-		public void SendAll() {
+		public async Task SendAll() {
 
 			bool isFilled = CheckFill();
 			if (!isFilled) {
-				MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				await MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
 				return;
 			}
+			var options = new DialogOptions() {
+				Title = "Массовая резня"
+			};
+			
+			var result = await Dialog.ShowCustomModal<ConfirmSendDialog, ConfirmSendDialogViewModel, object>(new ConfirmSendDialogViewModel("Сообщение будет отправлено ВСЕМ получателям. Вы уверены?"), options: options);
+			if (result is not bool) return;
 
-			var sender = new Sender();
-			sender.Send(Message, Global.GetMainWindow());
-			Global.StatusString = "Сообщение отправлено";
+			var isConfirmed = (bool) result;
+			if (isConfirmed) {
+				var sender = new Sender();
+				await sender.Send(Message, Global.GetMainWindow());
+				Global.StatusString = "Сообщение отправлено";
+			}
 		}
 
 		[RelayCommand]
@@ -112,12 +149,18 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void SendToAddress() {
+		public async Task SendToAddress() {
 			bool isFilled = !string.IsNullOrEmpty(Message);
 			if (!isFilled) {
-				MessageBox.ShowAsync("Не заполнено сообщение!", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				await MessageBox.ShowAsync("Не заполнено сообщение!", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
 				return;
 			}
+
+			var options = new DialogOptions() {
+				Title = "Отправить по адресу"
+			};
+
+			await Dialog.ShowCustomModal<SendByAddressDialog, SendByAddressDialogViewModel, object>(new SendByAddressDialogViewModel(Message), options: options);
 		}
 
 		[RelayCommand]
@@ -126,6 +169,15 @@ namespace NetSend.ViewModels {
 			newWindow.DataContext = new MessageHistoryWindowViewModel(this);
 			var mainWindow = Global.GetMainWindow();
 			newWindow.Show(mainWindow);
+		}
+
+		[RelayCommand]
+		public async Task OpenAbout() {
+			var newWindow = new AboutWindow();
+			newWindow.DataContext = new AboutWindowViewModel(newWindow);
+
+			var mainWindow = Global.GetMainWindow();
+			await newWindow.ShowDialog(mainWindow);
 		}
 
 		[RelayCommand]

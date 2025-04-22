@@ -5,6 +5,7 @@ using NetSend.Core;
 using NetSend.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NetSend.ViewModels {
@@ -33,6 +34,12 @@ namespace NetSend.ViewModels {
 
 		[RelayCommand]
 		public async Task Scan(string ipAddress) {
+
+			if (string.IsNullOrWhiteSpace(ipAddress)) {
+				Log += "Не введен фильтр!" + Environment.NewLine;
+				return;
+			}
+
 			IsScanning = true;
 			var scanner = new IPScanner();
 
@@ -49,8 +56,7 @@ namespace NetSend.ViewModels {
 			var timeResult = (endTime - startTime).TotalSeconds;
 			IsScanning = false;
 
-			var db = new Database();
-			db.WriteFilter(ipAddress);
+			new Database().WriteFilter(ipAddress);
 			window?.Close();
 		}
 
