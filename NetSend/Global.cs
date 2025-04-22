@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 namespace NetSend {
 	public static class Global {
 
-		public static readonly string VERSION = "v 1.1";
+		public static readonly string VERSION = "v 1.2";
 		public static ObservableCollection<Recipient> Recipients { get; set; } = new ObservableCollection<Recipient>();
 		public static string StatusString { get; set; } = string.Empty;
 

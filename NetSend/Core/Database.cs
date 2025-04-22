@@ -14,7 +14,8 @@ namespace NetSend.Core {
 		private enum Databases : byte {
 			CommonBase,
 			PseudonamesBase,
-			TemplatesBase
+			TemplatesBase,
+			IgnoredBase,
 		}
 
 		private string GetDatabase(Databases database) {
@@ -225,6 +226,33 @@ namespace NetSend.Core {
 		public List<Pseudoname> ReadAllPseudoNames() { 
 			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
 				var col = db.GetCollection<Pseudoname>("pseudonames");
+				var result = col.FindAll().ToList();
+				return result;
+			}
+		}
+
+		#endregion
+
+		#region Ignored
+
+		public void AddRecipientToIgnore(IgnoredRecipient ignoredRecipient) {
+			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>("ignored");
+				var foundedValue = col.FindOne(e => e.Address == ignoredRecipient.Address);
+				if (foundedValue != null) col.Insert(foundedValue);
+			}
+		}
+
+		public void RemoveRecipientFromIgnore(int id) {
+			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>("ignored");
+				col.Delete(id);
+			}
+		}
+
+		public List<IgnoredRecipient> GetAllIgnoredRecipients() {
+			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>("ignored");
 				var result = col.FindAll().ToList();
 				return result;
 			}

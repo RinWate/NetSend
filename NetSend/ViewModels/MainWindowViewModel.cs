@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using NetSend.Views;
 using Ursa.Controls;
 
 namespace NetSend.ViewModels {
@@ -185,7 +187,11 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public void OpenSettings() {
 			var newWindow = new SettingsWindow();
-			newWindow.DataContext = new SettingsWindowViewModel();
+			var viewModel = new SettingsWindowViewModel();
+			var topLevel = TopLevel.GetTopLevel(newWindow);
+			viewModel.ToastManager = new WindowToastManager(topLevel) {MaxItems = 3};
+			newWindow.DataContext = viewModel;
+			
 			var mainWindow = Global.GetMainWindow();
 			newWindow.ShowDialog(mainWindow);
 		}

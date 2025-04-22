@@ -5,7 +5,7 @@
 		xmlns:ursa="https://irihi.tech/ursa"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="{Binding Height, ElementName=Core}" Width="400" Height="{Binding Height, ElementName=Core}"
-        x:Class="NetSend.SettingsWindow"
+        x:Class="NetSend.Views.SettingsWindow"
 		x:DataType="vm:SettingsWindowViewModel"
 		WindowStartupLocation="CenterOwner"
 		CanResize="False"
@@ -15,7 +15,7 @@
 		<Grid Margin="5" 
 			  Name="Core"
 			  RowDefinitions="*, auto"
-			  Height="350">
+			  Height="380">
 			<StackPanel Margin="5" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Spacing="10">
 				<StackPanel Name="Common" Spacing="5">
 					<StackPanel Orientation="Horizontal" Spacing="5">
@@ -54,6 +54,19 @@
 									 UsePickerType="OpenFile"
 									 SelectedPathsText="{Binding PseudoNamesBase.Value}"
 									 Title="..."/>
+				</StackPanel>
+				
+				<StackPanel Spacing="5">
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<CheckBox Name="Ignored" Content="Общая база игнорируемых получателей"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения адресов, которые необходимо исключить из сканирования. Если на задана, будет создана в каталоге программы"/>
+					</StackPanel>
+					<ursa:PathPicker AllowMultiple="False"
+					                 FileFilter="[Игнор,*.litedb]"
+					                 IsEnabled="{Binding IsChecked, ElementName=Ignored}"
+					                 UsePickerType="OpenFile"
+					                 SelectedPathsText="{Binding IgnoredBase.Value}"
+					                 Title="..."/>
 				</StackPanel>
 				
 				<StackPanel>

@@ -1,11 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using NetSend.ViewModels;
+using Ursa.Controls;
 
-namespace NetSend;
+namespace NetSend.Views;
 
-public partial class SettingsWindow : Window
-{
+public partial class SettingsWindow : Window {
     public SettingsWindow()
     {
         InitializeComponent();

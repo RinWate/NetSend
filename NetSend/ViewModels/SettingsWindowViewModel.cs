@@ -1,28 +1,27 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Models;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
+using Ursa.Controls;
 
 namespace NetSend.ViewModels {
 	public partial class SettingsWindowViewModel : ViewModelBase {
 
+		public WindowToastManager? ToastManager { get; set; } 
+		
 		[ObservableProperty]
 		private Setting _commonBase = new Setting("CommonBase", string.Empty, false);
 		[ObservableProperty]
 		private Setting _templatesBase = new Setting("TemplatesBase", string.Empty, false);
 		[ObservableProperty]
 		private Setting _pseudoNamesBase = new Setting("PseudoNamesBase", string.Empty, false);
+		[ObservableProperty]
+		private Setting _ignoredBase = new Setting("IgnoredBase", string.Empty, false);
 		[ObservableProperty]
 		private Setting _defaultFilter = new Setting("DefaultFilter", string.Empty, false);
 
@@ -31,30 +30,34 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void SaveSettings() {
+		private void SaveSettings() {
 			var settings = new List<Setting>() {
 				CommonBase,
 				TemplatesBase,
 				PseudoNamesBase,
+				IgnoredBase,
 				DefaultFilter
 			};
 			Settings.WriteSettings(settings);
+			
+			ToastManager?.Show(new Toast("Настройки сохранены", NotificationType.Success));
 		}
 
 		[RelayCommand]
-		public void LoadSettings() {
+		private void LoadSettings() {
 			var settings = Settings.GetSettings();
 
 			if (settings != null && settings.Count > 0) {
-				CommonBase = Settings.FindSetting("CommonBase") ??			new Setting();
-				TemplatesBase = Settings.FindSetting("SettingsBase") ??		new Setting();
-				PseudoNamesBase = Settings.FindSetting("PseudoNamesBase") ??new Setting();
-				DefaultFilter = Settings.FindSetting("DefaultFilter") ??	new Setting();
+				CommonBase = Settings.FindSetting("CommonBase");
+				TemplatesBase = Settings.FindSetting("SettingsBase");
+				PseudoNamesBase = Settings.FindSetting("PseudoNamesBase");
+				IgnoredBase = Settings.FindSetting("IgnoredBase");
+				DefaultFilter = Settings.FindSetting("DefaultFilter");
 			}
 		}
 
 		[RelayCommand]
-		public void OpenProgramCatalog() {
+		private void OpenProgramCatalog() {
 			var directory = Directory.GetCurrentDirectory();
 			if (Directory.Exists(directory)) { 
 				Process.Start("explorer.exe", directory);
