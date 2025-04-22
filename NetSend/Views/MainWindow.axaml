@@ -41,10 +41,10 @@
 		<Grid ColumnSpacing="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
 			  ColumnDefinitions="auto, auto, auto">
 			<Button Grid.Column="0"
-					Grid.Row="1"
+					Grid.Row="0"
 					Content="Сканировать"
 					Command="{Binding ScanCommand}"/>
-			<SplitButton Grid.Column="1" Grid.Row="1" Content="Отправить выбранным" Command="{Binding SendCommand}">
+			<SplitButton Grid.Column="1" Grid.Row="0" Content="Отправить выбранным" Command="{Binding SendCommand}">
 				<SplitButton.Flyout>
 					<MenuFlyout>
 						<MenuItem Header="Всем" Command="{Binding SendAllCommand}"/>
@@ -88,17 +88,17 @@
 						<Separator/>
 						<MenuItem Header="Добавить в избранное"
 								  Command="{Binding AddInFavouriteCommand}"
-								  IsVisible="{Binding !SelectedRecipients[0].IsFavourite}"/>
+								  IsVisible="{Binding !SelectedRecipients[0].IsFavourite, Mode=TwoWay}"/>
 						<MenuItem Header="Удалить из избранного"
 								  Command="{Binding RemoveInFavouriteCommand}"
-								  IsVisible="{Binding SelectedRecipients[0].IsFavourite}"/>
+								  IsVisible="{Binding SelectedRecipients[0].IsFavourite, Mode=TwoWay}"/>
 						<Separator/>
 						<MenuItem Header="Игнорировать" IsEnabled="False" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
 					</ContextMenu>
 				</ListBox.ContextMenu>
 				<ListBox.ItemTemplate>
 					<DataTemplate DataType="models:Recipient">
-						<TextBlock Text="{Binding}" FontWeight="{Binding Converter={StaticResource ResourceKey=FavouriteConverter}}"/>
+						<TextBlock Text="{Binding}" FontWeight="{Binding IsFavourite, Converter={StaticResource ResourceKey=FavouriteConverter}}"/>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Ursa.Controls;
 
@@ -18,7 +19,7 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private string _message;
 		[ObservableProperty]
-		private List<Recipient> _selectedRecipients;
+		private ObservableCollection<Recipient> _selectedRecipients;
 		[ObservableProperty]
 		private ObservableCollection<Recipient> _filteredItems = new ObservableCollection<Recipient>();
 		private string _searchText = string.Empty;
@@ -53,10 +54,14 @@ namespace NetSend.ViewModels {
 
 		public MainWindowViewModel() {
 			Message = string.Empty;
-			SelectedRecipients = new List<Recipient>();
+			SelectedRecipients = new ObservableCollection<Recipient>();
+			
+			Global.Recipients.Add(new Recipient("IT-13.mcb.ru", IPAddress.Any));
+			Global.Recipients.Add(new Recipient("IT-15.mcb.ru", IPAddress.Parse("192.168.10.13")));
+			Global.Recipients.Add(new Recipient("IT-11.mcb.ru", IPAddress.Parse("192.168.10.14")));
+			Global.Recipients.Add(new Recipient("IT-18.mcb.ru", IPAddress.Parse("192.168.10.15")));
 
 			FilterRecipients();
-
 			Global.StatusString = "Сканирование не выполнялось";
 		}
 
@@ -139,15 +144,15 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void Send() {
+		public async Task Send() {
 			bool isFilled = CheckFill();
 			if (!isFilled) {
-				MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				await MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
 				return;
 			}
 
 			var sender = new Sender();
-			sender.Send(Message, Global.GetMainWindow(), SelectedRecipients);
+			await sender.Send(Message, Global.GetMainWindow(), SelectedRecipients.ToList());
 		}
 
 		[RelayCommand]
