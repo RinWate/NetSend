@@ -15,7 +15,7 @@ namespace NetSend.Core {
 		
 		public Sender() { }
 
-		public async void Send(string message, Window parent, List<Recipient>? recipients = null) {
+		public async Task Send(string message, Window parent, List<Recipient>? recipients = null) {
 
 			var errors = new List<string>();
 			var tasks = new List<Task>();

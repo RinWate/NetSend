@@ -2,6 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:NetSend.ViewModels"
 		xmlns:local="clr-namespace:NetSend;assembly=NetSend"
+		xmlns:models="clr-namespace:NetSend.Models;assembly=NetSend"
+		xmlns:converters="clr-namespace:NetSend.Converters;assembly=NetSend"
 		xmlns:ursa="https://irihi.tech/ursa"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,13 +20,17 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+	<Window.Resources>
+		<converters:BoolToFontWeightConverter x:Key="FavouriteConverter"/>
+	</Window.Resources>
+
 	<Grid Margin="5" ColumnSpacing="5" RowSpacing="5" ColumnDefinitions="*,*" RowDefinitions="auto,auto,*,auto">
 		<Menu FontSize="13">
 			<MenuItem Header="Файл">
 				<MenuItem Header="История сообщений" Command="{Binding OpenHistoryCommand}"></MenuItem>
 				<Separator/>
-				<MenuItem Header="О программе" IsEnabled="False"></MenuItem>
 				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
+				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}"></MenuItem>
 				<Separator/>
 				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
 			</MenuItem>
@@ -38,20 +44,14 @@
 					Grid.Row="1"
 					Content="Сканировать"
 					Command="{Binding ScanCommand}"/>
-			<SplitButton Grid.Column="1" Grid.Row="1" Content="Отправить всем" Command="{Binding SendAllCommand}">
+			<SplitButton Grid.Column="1" Grid.Row="1" Content="Отправить выбранным" Command="{Binding SendCommand}">
 				<SplitButton.Flyout>
 					<MenuFlyout>
-						<MenuItem Header="Выбранным" Command="{Binding SendCommand}"/>
-						<MenuItem Header="По адресу..." IsEnabled="False"/>
+						<MenuItem Header="Всем" Command="{Binding SendAllCommand}"/>
+						<MenuItem Header="По адресу..." Command="{Binding SendToAddressCommand}"/>
 					</MenuFlyout>
 				</SplitButton.Flyout>
 			</SplitButton>
-			<ursa:ButtonGroup Grid.Column="1" Grid.Row="1" Foreground="Aqua" IsVisible="False">
-				<Button Content="Отправить всем"
-						Command="{Binding SendAllCommand}"></Button>
-				<Button Content="Отправить выбранным"
-						Command="{Binding SendCommand}"></Button>
-			</ursa:ButtonGroup>
 			<Button Grid.Column="2"
 					Content="История"
 					Command="{Binding OpenHistoryCommand}">
@@ -63,8 +63,10 @@
 				 VerticalContentAlignment="Stretch"
 				 TextAlignment="Start"
 				 TextWrapping="Wrap"
+				 AcceptsReturn="True"
 				 Watermark="Сообщение..."
-				 Text="{Binding Message}"/>
+				 Text="{Binding Message}"
+				 MaxLength="255"/>
 		<Grid Grid.Column="0"
 			  Grid.Row="2"
 			  RowDefinitions="*, auto">
@@ -81,9 +83,24 @@
 						<MenuItem Header="Установить псевдоним..."
 								  Command="{Binding SetPseudoNameCommand}"
 								  ToolTip.Tip="Псевдоним будет отображаться вместо доменного имени"/>
+						<MenuItem Header="Сбросить псевдоним..."
+								  Command="{Binding ClearPseudoNameCommand}"/>
+						<Separator/>
+						<MenuItem Header="Добавить в избранное"
+								  Command="{Binding AddInFavouriteCommand}"
+								  IsVisible="{Binding !SelectedRecipients[0].IsFavourite}"/>
+						<MenuItem Header="Удалить из избранного"
+								  Command="{Binding RemoveInFavouriteCommand}"
+								  IsVisible="{Binding SelectedRecipients[0].IsFavourite}"/>
+						<Separator/>
 						<MenuItem Header="Игнорировать" IsEnabled="False" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
 					</ContextMenu>
 				</ListBox.ContextMenu>
+				<ListBox.ItemTemplate>
+					<DataTemplate DataType="models:Recipient">
+						<TextBlock Text="{Binding}" FontWeight="{Binding Converter={StaticResource ResourceKey=FavouriteConverter}}"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
 			</ListBox>
 			<TextBox Name="Filter" Grid.Row="1" Watermark="Поиск..." Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 		</Grid>

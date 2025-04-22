@@ -30,16 +30,16 @@
 									 Title="..."></ursa:PathPicker>
 				</StackPanel>
 				
-				<StackPanel Name="Setting" Spacing="5">
+				<StackPanel Name="Template" Spacing="5">
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<CheckBox Name="SettingsBase" Content="Общая база настроек" IsChecked="{Binding SettingsBase.isEnabled}"/>
-						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения настроек приложения. Если не задана, будет создана в каталоге программы"/>
+						<CheckBox Name="TemplatesBase" IsEnabled="False" Content="Общая база шаблонов" IsChecked="{Binding TemplatesBase.isEnabled}"/>
+						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения текстовых шаблонов. Если не задана, будет создана в каталоге программы"/>
 					</StackPanel>
 					<ursa:PathPicker AllowMultiple="False"
 									 FileFilter="[Настройки,*.litedb]"
-									 IsEnabled="{Binding IsChecked, ElementName=SettingsBase}"
+									 IsEnabled="{Binding IsChecked, ElementName=TemplatesBase}"
 									 UsePickerType="OpenFile"
-									 SelectedPathsText="{Binding SettingsBase.Value}"
+									 SelectedPathsText="{Binding TemplatesBase.Value}"
 									 Title="..."/>
 				</StackPanel>
 
@@ -49,7 +49,7 @@
 						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения псевдонимов получателей. Если не задана, будет создана в каталоге программы"/>
 					</StackPanel>
 					<ursa:PathPicker AllowMultiple="False"
-									 FileFilter="[Сообщения,*.litedb]"
+									 FileFilter="[Псевдонимы,*.litedb]"
 									 IsEnabled="{Binding IsChecked, ElementName=PseudoNames}"
 									 UsePickerType="OpenFile"
 									 SelectedPathsText="{Binding PseudoNamesBase.Value}"
@@ -71,6 +71,7 @@
 						HorizontalAlignment="Center" 
 						VerticalAlignment="Stretch">
 				<Button Content="Сохранить" Command="{Binding SaveSettingsCommand}"/>
+				<Button Content="Рабочий каталог" Command="{Binding OpenProgramCatalogCommand}"/>
 			</StackPanel>
 
 		</Grid>
