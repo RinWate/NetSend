@@ -1,9 +1,7 @@
-﻿using Avalonia.Threading;
-using NetSend.Models;
+﻿using NetSend.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -16,36 +14,34 @@ namespace NetSend.Core {
 		public void Scan(string ip_filter, int threads, Action<string> log) {
 			Global.Recipients.Clear();
 			var temp_list = new ConcurrentBag<Recipient>();
-			var stringIp = IPAddress.Parse(ip_filter);
-			var byteIp = stringIp.GetAddressBytes();
 			var errors = new List<string>();
 
-			var parallelOptions = new ParallelOptions();
-			parallelOptions.MaxDegreeOfParallelism = threads;
+			var poolSize = 255;
+			var stringIp = IPAddress.Parse(ip_filter);
+			
+			var rangePartitioner = Partitioner.Create(0, poolSize, poolSize / 8);
+			Parallel.ForEach(rangePartitioner, (range, state) => {
+				var byteIp = stringIp.GetAddressBytes();
+				for (int i = range.Item1; i < range.Item2; i++) {
+					byteIp[3] = (byte) i;
+					var addr = new IPAddress(byteIp);
 
-			var start = 0;
-			var end = 255;
-
-			Parallel.For(start, end, parallelOptions, i => {
-				byteIp[3] = (byte) i;
-
-				var addr = new IPAddress(byteIp);
-				var hostname = new IPHostEntry();
-
-				try {
-					var ping = new Ping();
-					var pingResult = ping.Send(addr);
-					if (pingResult.Status == IPStatus.Success) {
-						hostname = Dns.GetHostEntry(addr);
-						if (hostname != null) {
-							temp_list.Add(new Recipient(hostname.HostName, addr));
-							log($"Найден: {hostname.HostName} : {addr}");
+					try {
+						var ping = new Ping();
+						var reply = ping.Send(addr, 1);
+						if (reply.Status == IPStatus.Success) {
+							var hostname = Dns.GetHostEntry(addr);
+							if (hostname != null) {
+								temp_list.Add(new Recipient(hostname.HostName, addr));
+								log($"Найден: {hostname.HostName} : {addr}");
+							}
 						}
+					} catch (Exception e) {
+						errors.Add($"{addr} : {e.Message}");
 					}
-				} catch (Exception e) { 
-					errors.Add($"{addr.ToString()}: {e.Message}");
 				}
 			});
+			
 			var result = temp_list.OrderBy(a => a.Hostname).Distinct(new AddressComparer()).ToList();
 			foreach (var temp in result) { 
 				Global.Recipients.Add(temp);
