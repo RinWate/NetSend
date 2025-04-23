@@ -26,6 +26,7 @@ namespace NetSend
             {
                 Settings.RegisterAdditionalMappings();
                 Settings.LoadSettings();
+                Settings.LoadIgnoredRecipients();
                 Settings.ReloadRecipients();
 
                 DisableAvaloniaDataAnnotationValidation();

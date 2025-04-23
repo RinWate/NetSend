@@ -2,6 +2,7 @@
 using NetSend.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 
@@ -179,6 +180,7 @@ namespace NetSend.Core {
 
 			var pseudonames = ReadAllPseudoNames();
 			var favourites = ReadAllFavourites();
+			var ignored = ReadAllIgnoredRecipients();
 
 			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
 				var col = db.GetCollection<Recipient>("recipients");
@@ -188,6 +190,9 @@ namespace NetSend.Core {
 					var recipientIp = recipient.Address.ToString();
 					var foundedPseudoname = pseudonames.Find(e => e.Address.ToString() == recipientIp);
 					var foundedFavourite = favourites.Find(e => e.Address.ToString() == recipientIp);
+					var isIgnored = ignored.Find(e => e.Address.ToString() == recipientIp) != null;
+
+					recipient.IsIgnored = isIgnored;
 
 					if (foundedPseudoname != null) recipient.PseudoName = foundedPseudoname.Name;
 					else recipient.PseudoName = "";
@@ -195,6 +200,7 @@ namespace NetSend.Core {
 					if (foundedFavourite != null) recipient.IsFavourite = true;
 					else recipient.IsFavourite = false;
 				}
+				result.RemoveAll(e => e.IsIgnored);
 
 				return result;
 			}
@@ -239,7 +245,9 @@ namespace NetSend.Core {
 			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
 				var col = db.GetCollection<IgnoredRecipient>("ignored");
 				var foundedValue = col.FindOne(e => e.Address == ignoredRecipient.Address);
-				if (foundedValue != null) col.Insert(foundedValue);
+				if (foundedValue == null) {
+					col.Insert(ignoredRecipient);
+				};
 			}
 		}
 
@@ -250,11 +258,25 @@ namespace NetSend.Core {
 			}
 		}
 
-		public List<IgnoredRecipient> GetAllIgnoredRecipients() {
+		public void UpdateIgnoredRecipient(IgnoredRecipient recipient) {
+			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>("ignored");
+				col.Update(recipient);
+			}
+		}
+
+		public List<IgnoredRecipient> ReadAllIgnoredRecipients() {
 			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
 				var col = db.GetCollection<IgnoredRecipient>("ignored");
 				var result = col.FindAll().ToList();
 				return result;
+			}
+		}
+
+		public void RemoveAllIgnoredRecipients() {
+			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>("ignored");
+				col.DeleteAll();
 			}
 		}
 

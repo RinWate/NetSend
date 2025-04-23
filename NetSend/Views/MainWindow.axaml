@@ -28,6 +28,7 @@
 		<Menu FontSize="13">
 			<MenuItem Header="Файл">
 				<MenuItem Header="История сообщений" Command="{Binding OpenHistoryCommand}"></MenuItem>
+				<MenuItem Header="Черный список" Command="{Binding OpenIgnoredListCommand}"/>
 				<Separator/>
 				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
 				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}"></MenuItem>
@@ -93,7 +94,7 @@
 								  Command="{Binding RemoveInFavouriteCommand}"
 								  IsVisible="{Binding SelectedRecipients[0].IsFavourite, Mode=TwoWay}"/>
 						<Separator/>
-						<MenuItem Header="Игнорировать" IsEnabled="False" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
+						<MenuItem Header="Игнорировать" Command="{Binding AddRecipientToIgnoreListCommand}" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
 					</ContextMenu>
 				</ListBox.ContextMenu>
 				<ListBox.ItemTemplate>

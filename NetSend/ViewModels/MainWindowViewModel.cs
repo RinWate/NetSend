@@ -1,18 +1,15 @@
 ﻿
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Dialogs;
 using NetSend.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Avalonia.Controls;
 using NetSend.Views;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Ursa.Controls;
 
 namespace NetSend.ViewModels {
@@ -60,6 +57,16 @@ namespace NetSend.ViewModels {
 
 			FilterRecipients();
 			Global.StatusString = "Сканирование не выполнялось";
+		}
+
+		[RelayCommand]
+		public void AddRecipientToIgnoreList() {
+			var selected = SelectedRecipients[0];
+			new Database().AddRecipientToIgnore(new IgnoredRecipient(selected.Hostname, selected.Address));
+			
+			Settings.LoadIgnoredRecipients();
+			Settings.ReloadRecipients();
+			FilterRecipients();
 		}
 
 		[RelayCommand]
@@ -194,6 +201,18 @@ namespace NetSend.ViewModels {
 			
 			var mainWindow = Global.GetMainWindow();
 			newWindow.ShowDialog(mainWindow);
+		}
+
+		[RelayCommand]
+		public async Task OpenIgnoredList() {
+			var newWindow = new IgnoredWindow();
+			newWindow.DataContext = new IgnoredWindowViewModel();
+
+			var mainWindow = Global.GetMainWindow();
+			await newWindow.ShowDialog(mainWindow);
+
+			Settings.ReloadRecipients();
+			FilterRecipients();
 		}
 
 		[RelayCommand]

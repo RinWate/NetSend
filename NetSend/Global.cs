@@ -10,6 +10,7 @@ namespace NetSend {
 
 		public static readonly string VERSION = "v 1.2";
 		public static ObservableCollection<Recipient> Recipients { get; set; } = new ObservableCollection<Recipient>();
+		public static ObservableCollection<IgnoredRecipient> IgnoredRecipients { get; set; } = new ObservableCollection<IgnoredRecipient>();
 		public static string StatusString { get; set; } = string.Empty;
 
 		public static Window GetMainWindow() {

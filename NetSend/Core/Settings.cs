@@ -24,6 +24,11 @@ namespace NetSend.Core {
 			return settings;
 		}
 
+		public static void LoadIgnoredRecipients() {
+			var ignored = new Database().ReadAllIgnoredRecipients();
+			Global.IgnoredRecipients = new ObservableCollection<IgnoredRecipient>(ignored);
+		}
+
 		public static List<Setting> GetSettings() {
 			return settings;
 		}

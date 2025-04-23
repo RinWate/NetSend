@@ -18,13 +18,16 @@ namespace NetSend.Core {
 
 			var poolSize = 255;
 			var stringIp = IPAddress.Parse(ip_filter);
-			
+			var db = new Database();
+
 			var rangePartitioner = Partitioner.Create(0, poolSize, poolSize / 8);
 			Parallel.ForEach(rangePartitioner, (range, state) => {
 				var byteIp = stringIp.GetAddressBytes();
 				for (int i = range.Item1; i < range.Item2; i++) {
 					byteIp[3] = (byte) i;
 					var addr = new IPAddress(byteIp);
+					var isIgnored = Global.IgnoredRecipients.FirstOrDefault(e => e.Address.ToString() == addr.ToString()) != null;
+					if (isIgnored) continue;
 
 					try {
 						var ping = new Ping();

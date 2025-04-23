@@ -4,6 +4,8 @@ using System.Net;
 namespace NetSend.Models {
 	public class Recipient : ObservableObject {
 		public int Id { get; set; }
+
+		public bool IsIgnored { get; set; }
 		public bool IsFavourite { get; set; }
 		public string PseudoName { get; set; } = string.Empty;
 		public string Hostname { get; set; } = string.Empty;

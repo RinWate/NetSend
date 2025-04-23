@@ -5,6 +5,7 @@ using NetSend.Core;
 using NetSend.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,6 +38,13 @@ namespace NetSend.ViewModels {
 
 			if (string.IsNullOrWhiteSpace(ipAddress)) {
 				Log += "Не введен фильтр!" + Environment.NewLine;
+				return;
+			}
+
+			try {
+				var address = IPAddress.Parse(ipAddress);
+			} catch (Exception ex) {
+				Log += "Некорректный формат фильтра!" + Environment.NewLine;
 				return;
 			}
 
