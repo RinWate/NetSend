@@ -13,9 +13,9 @@
                         <Button Content="Очистить" Command="{Binding ClearIgnoredRecipientsCommand}"/>
                 </StackPanel>
                 <DataGrid Grid.Row="1"
-						  SelectionMode="Single"
+						  SelectionMode="Extended"
                           ItemsSource="{Binding IgnoredRecipients}"
-						  SelectedItem="{Binding SelectedRecipient}">
+						  SelectionChanged="DataGrid_SelectionChanged">
                         <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Width="Auto" Binding="{Binding Id}" IsReadOnly="True"></DataGridTextColumn>
                                 <DataGridTextColumn Header="Доменное имя" Width="Auto" Binding="{Binding DomainName}" IsReadOnly="True"></DataGridTextColumn>

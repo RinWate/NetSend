@@ -65,7 +65,7 @@
 				 TextAlignment="Start"
 				 TextWrapping="Wrap"
 				 AcceptsReturn="True"
-				 Watermark="Сообщение..."
+				 Watermark="Сообщение... (максимум 255 символов)"
 				 Text="{Binding Message}"
 				 MaxLength="255"/>
 		<Grid Grid.Column="0"
@@ -99,7 +99,10 @@
 				</ListBox.ContextMenu>
 				<ListBox.ItemTemplate>
 					<DataTemplate DataType="models:Recipient">
-						<TextBlock Text="{Binding}" FontWeight="{Binding IsFavourite, Converter={StaticResource ResourceKey=FavouriteConverter}}"/>
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<Image Source="/Assets/favouriteIcon.png" Width="16" IsVisible="{Binding IsFavourite}"/>
+							<TextBlock Text="{Binding}" FontWeight="{Binding IsFavourite, Converter={StaticResource ResourceKey=FavouriteConverter}}"/>
+						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>

@@ -7,6 +7,7 @@ using NetSend.Dialogs;
 using NetSend.Models;
 using NetSend.Views;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,8 +62,12 @@ namespace NetSend.ViewModels {
 
 		[RelayCommand]
 		public void AddRecipientToIgnoreList() {
-			var selected = SelectedRecipients[0];
-			new Database().AddRecipientToIgnore(new IgnoredRecipient(selected.Hostname, selected.Address));
+			var selected = SelectedRecipients;
+			var ignored = new List<IgnoredRecipient>();
+			foreach (var recipient in selected) {
+				ignored.Add(new IgnoredRecipient(recipient.Hostname, recipient.Address));
+			}
+			new Database().AddRecipientToIgnore(ignored);
 			
 			Settings.LoadIgnoredRecipients();
 			Settings.ReloadRecipients();
@@ -79,8 +84,8 @@ namespace NetSend.ViewModels {
 				Mode = DialogMode.Question
 			};
 			var result = await Dialog.ShowCustomModal<PseudoNameSetterDialog, PseudoNameSetterDialogViewModel, object>(new PseudoNameSetterDialogViewModel(selectedRecipient.Address), options: options);
-			if (result != null && result is string) { 
-				selectedRecipient.PseudoName = result as string;
+			if (result != null && result is string) {
+				selectedRecipient.PseudoName = result as string ?? "";
 				Settings.ReloadRecipients();
 				FilterRecipients();
 			}
@@ -96,18 +101,22 @@ namespace NetSend.ViewModels {
 
 		[RelayCommand]
 		public void AddInFavourite() {
-			var selectedRecipient = SelectedRecipients[0];
-			selectedRecipient.IsFavourite = true;
-			new Database().SetFavourite(selectedRecipient.Address);
+			var selectedRecipient = SelectedRecipients;
+			foreach (var recipient in selectedRecipient) {
+				recipient.IsFavourite = true;
+			}
+			new Database().SetFavourite(selectedRecipient.ToList());
 			Settings.ReloadRecipients();
 			FilterRecipients();
 		}
 
 		[RelayCommand]
 		public void RemoveInFavourite() {
-			var selectedRecipient = SelectedRecipients[0];
-			selectedRecipient.IsFavourite = false;
-			new Database().ClearFavourite(selectedRecipient.Address);
+			var selectedRecipient = SelectedRecipients;
+			foreach (var recipient in selectedRecipient) { 
+				recipient.IsFavourite = false;
+			}
+			new Database().ClearFavourite(selectedRecipient.ToList());
 			Settings.ReloadRecipients();
 			FilterRecipients();
 		}
@@ -115,7 +124,6 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public async Task Scan() {
 			var newScan = new ScanWindow();
-			newScan.DataContext = new ScanWindowViewModel(newScan);
 
 			var mainWindow = Global.GetMainWindow();
 			await newScan.ShowDialog(mainWindow);
@@ -176,8 +184,7 @@ namespace NetSend.ViewModels {
 
 		[RelayCommand]
 		public void OpenHistory() {
-			var newWindow = new MessageHistoryWindow();
-			newWindow.DataContext = new MessageHistoryWindowViewModel(this);
+			var newWindow = new MessageHistoryWindow(this);
 			var mainWindow = Global.GetMainWindow();
 			newWindow.Show(mainWindow);
 		}
@@ -185,7 +192,6 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public async Task OpenAbout() {
 			var newWindow = new AboutWindow();
-			newWindow.DataContext = new AboutWindowViewModel(newWindow);
 
 			var mainWindow = Global.GetMainWindow();
 			await newWindow.ShowDialog(mainWindow);
@@ -194,10 +200,6 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public void OpenSettings() {
 			var newWindow = new SettingsWindow();
-			var viewModel = new SettingsWindowViewModel();
-			var topLevel = TopLevel.GetTopLevel(newWindow);
-			viewModel.ToastManager = new WindowToastManager(topLevel) {MaxItems = 3};
-			newWindow.DataContext = viewModel;
 			
 			var mainWindow = Global.GetMainWindow();
 			newWindow.ShowDialog(mainWindow);
@@ -206,7 +208,6 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public async Task OpenIgnoredList() {
 			var newWindow = new IgnoredWindow();
-			newWindow.DataContext = new IgnoredWindowViewModel();
 
 			var mainWindow = Global.GetMainWindow();
 			await newWindow.ShowDialog(mainWindow);

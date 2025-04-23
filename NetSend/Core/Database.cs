@@ -76,21 +76,22 @@ namespace NetSend.Core {
 
 		#region Favourites
 
-		public void SetFavourite(IPAddress address) {
+		public void SetFavourite(List<Recipient> recipients) {
 			using (var db = new LiteDatabase(_favouritesBase)) {
 				var col = db.GetCollection<Favourite>("favourites");
-
-				var foundedValue = col.FindOne(x => x.Address == address);
-				if (foundedValue == null) col.Insert(new Favourite(address));
+				var favourites = new List<Favourite>();
+				foreach (var recipient in recipients) {
+					favourites.Add(new Favourite(recipient.Address));
+				}
+				col.Insert(favourites);
 			}
 		}
 
-		public void ClearFavourite(IPAddress address) {
+		public void ClearFavourite(List<Recipient> recipients) {
 			using (var db = new LiteDatabase(_favouritesBase)) {
 				var col = db.GetCollection<Favourite>("favourites");
-
-				var foundedValue = col.FindOne(x => x.Address == address);
-				if (foundedValue != null) col.Delete(foundedValue.Id);
+				var addresses = recipients.Select(e => e.Address).ToHashSet();
+				col.DeleteMany(e => addresses.Contains(e.Address));
 			}
 		}
 
@@ -194,7 +195,7 @@ namespace NetSend.Core {
 
 					recipient.IsIgnored = isIgnored;
 
-					if (foundedPseudoname != null) recipient.PseudoName = foundedPseudoname.Name;
+					if (foundedPseudoname != null) recipient.PseudoName = foundedPseudoname.Name ?? "";
 					else recipient.PseudoName = "";
 
 					if (foundedFavourite != null) recipient.IsFavourite = true;
@@ -241,13 +242,10 @@ namespace NetSend.Core {
 
 		#region Ignored
 
-		public void AddRecipientToIgnore(IgnoredRecipient ignoredRecipient) {
+		public void AddRecipientToIgnore(List<IgnoredRecipient> ignoredRecipients) {
 			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
 				var col = db.GetCollection<IgnoredRecipient>("ignored");
-				var foundedValue = col.FindOne(e => e.Address == ignoredRecipient.Address);
-				if (foundedValue == null) {
-					col.Insert(ignoredRecipient);
-				};
+				col.Upsert(ignoredRecipients);
 			}
 		}
 
@@ -255,6 +253,15 @@ namespace NetSend.Core {
 			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
 				var col = db.GetCollection<IgnoredRecipient>("ignored");
 				col.Delete(id);
+			}
+		}
+
+		public void RemoveRecipientsFromIgnore(List<IgnoredRecipient> ignoredRecipients) {
+			if (ignoredRecipients == null) return;
+			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>("ignored");
+				var idsToRemove = ignoredRecipients.Select(e => e.Id).ToHashSet();
+				col.DeleteMany(e => idsToRemove.Contains(e.Id));
 			}
 		}
 

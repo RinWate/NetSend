@@ -12,7 +12,7 @@
 		<StackPanel Grid.Row="1" Spacing="10" VerticalAlignment="Center">
 			<StackPanel Spacing="5">
 				<Label Content="IP-адрес получателя:"/>
-				<ursa:IPv4Box HorizontalAlignment="Stretch" IPAddress="{Binding Address}"/>
+				<ursa:IPv4Box Name="tb_address" HorizontalAlignment="Stretch" IPAddress="{Binding Address}"/>
 			</StackPanel>
 			<StackPanel Spacing="5">
 				<Label Content="Сообщение:"/>
@@ -21,7 +21,8 @@
 		</StackPanel>
 
 		<Button Grid.Row="2" Content="Отправить" 
-				Command="{Binding SendCommand}"/>
+				Command="{Binding SendCommand}"
+				HotKey="Enter"/>
 	</Grid>
 	
 </UserControl>

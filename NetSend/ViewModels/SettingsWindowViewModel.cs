@@ -40,7 +40,7 @@ namespace NetSend.ViewModels {
 			};
 			Settings.WriteSettings(settings);
 			
-			ToastManager?.Show(new Toast("Настройки сохранены", NotificationType.Success));
+			ToastManager?.Show(new Toast("Настройки сохранены"), NotificationType.Success, showIcon: true, showClose: true);
 		}
 
 		[RelayCommand]
