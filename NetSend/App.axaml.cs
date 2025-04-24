@@ -15,9 +15,17 @@ namespace NetSend {
 
 		public override void OnFrameworkInitializationCompleted() {
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-
 				Settings.RegisterAdditionalMappings();
 				Settings.LoadSettings();
+
+				var isCanRun = new Database().CheckAccess();
+				if (!isCanRun) {
+					var errorWindow = new AccessErrorWindow();
+					desktop.MainWindow = errorWindow;
+					errorWindow.Show();
+					return;
+				}
+
 				Settings.LoadIgnoredRecipients();
 				Settings.ReloadRecipients();
 

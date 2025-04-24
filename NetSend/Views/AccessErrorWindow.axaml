@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="100"
+		Width="500" Height="100"
+        x:Class="NetSend.AccessErrorWindow"
+		x:DataType="vm:AccessErrorWindowViewModel"
+		WindowStartupLocation="CenterScreen"
+		ClosingBehavior="OwnerAndChildWindows"
+		FontSize="12"
+        Title="Ошибка доступа к базе данных">
+	<Grid RowDefinitions="*, auto" Margin="10">
+		<TextBlock Text="Доступ к базе данных заблокирован другим процессом. Возможно, программа открыта у кого-то ещё... -_-"
+				   TextWrapping="Wrap"/>
+		<StackPanel Grid.Row="1"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Spacing="10"
+					Orientation="Horizontal">
+			<Button Content="Попробовать ещё раз" Command="{Binding TryAgainCommand}"/>
+			<Button Content="Закрыть программу" Command="{Binding CloseAppCommand}"/>
+		</StackPanel>
+	</Grid>
+</Window>
