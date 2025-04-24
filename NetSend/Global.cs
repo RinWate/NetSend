@@ -8,8 +8,8 @@ using System.Collections.ObjectModel;
 namespace NetSend {
 	public static class Global {
 
-		public static readonly string[] TITLES = { @"Режим ""Глашатый""", "Наведём суету?", "Орём во весь голос?", "Устроим спам?", "У меня окошко вылезло..." };
-		public static readonly string VERSION = "v 1.3.1 Native";
+		public static readonly string[] TITLES = { @"Режим ""Глашатай""", "Наведём суету?", "Орём во весь голос?", "Устроим спам?", "У меня окошко вылезло..." };
+		public static readonly string VERSION = "v 1.3.2 Native";
 		public static ObservableCollection<Recipient> Recipients { get; set; } = new ObservableCollection<Recipient>();
 		public static ObservableCollection<IgnoredRecipient> IgnoredRecipients { get; set; } = new ObservableCollection<IgnoredRecipient>();
 		public static string StatusString { get; set; } = string.Empty;

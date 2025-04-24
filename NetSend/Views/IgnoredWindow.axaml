@@ -16,6 +16,7 @@
                 <DataGrid Grid.Row="1"
 						  SelectionMode="Extended"
                           ItemsSource="{Binding IgnoredRecipients}"
+						  CellEditEnded="DataGrid_OnCellEditEnded"
 						  SelectionChanged="DataGrid_SelectionChanged">
                         <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Width="Auto" Binding="{Binding Id}" IsReadOnly="True"></DataGridTextColumn>
