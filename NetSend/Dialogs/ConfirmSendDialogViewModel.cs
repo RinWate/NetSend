@@ -3,10 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetSend.Dialogs {
 	public partial class ConfirmSendDialogViewModel : ViewModelBase, IDialogContext {

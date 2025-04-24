@@ -1,6 +1,4 @@
-﻿
-using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
+﻿using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
@@ -71,7 +69,7 @@ namespace NetSend.ViewModels {
 				ignored.Add(new IgnoredRecipient(recipient.Hostname, recipient.Address));
 			}
 			new Database().AddRecipientToIgnore(ignored);
-			
+
 			Settings.LoadIgnoredRecipients();
 			Settings.ReloadRecipients();
 			FilterRecipients();
@@ -116,7 +114,7 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public void RemoveInFavourite() {
 			var selectedRecipient = SelectedRecipients;
-			foreach (var recipient in selectedRecipient) { 
+			foreach (var recipient in selectedRecipient) {
 				recipient.IsFavourite = false;
 			}
 			new Database().ClearFavourite(selectedRecipient.ToList());
@@ -148,11 +146,11 @@ namespace NetSend.ViewModels {
 			var options = new DialogOptions() {
 				Title = Global.GetRandomTitle()
 			};
-			
+
 			var result = await Dialog.ShowCustomModal<ConfirmSendDialog, ConfirmSendDialogViewModel, object>(new ConfirmSendDialogViewModel("Сообщение будет отправлено ВСЕМ получателям. Вы уверены?"), options: options);
 			if (result is not bool) return;
 
-			var isConfirmed = (bool) result;
+			var isConfirmed = (bool)result;
 			if (isConfirmed) {
 				var sender = new Sender();
 				await sender.Send(Message, Global.GetMainWindow());
@@ -206,7 +204,7 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		public async Task OpenSettings() {
 			var newWindow = new SettingsWindow();
-			
+
 			var mainWindow = Global.GetMainWindow();
 			await newWindow.ShowDialog(mainWindow);
 		}
@@ -233,5 +231,5 @@ namespace NetSend.ViewModels {
 			bool RecipientsIsNull = Global.Recipients.Count == 0;
 			return !MessageIsNull && !RecipientsIsNull;
 		}
-    }
+	}
 }

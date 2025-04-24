@@ -1,12 +1,8 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Models;
-using System.Windows;
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices.ComTypes;
-using Avalonia.Input.Platform;
 using System.Threading.Tasks;
 
 namespace NetSend.ViewModels {
@@ -19,7 +15,7 @@ namespace NetSend.ViewModels {
 
 		private MainWindowViewModel? _mainViewModel;
 
-		public MessageHistoryWindowViewModel() { 
+		public MessageHistoryWindowViewModel() {
 			var db = new Database();
 			Messages = new ObservableCollection<Message>(db.AllMessages());
 		}

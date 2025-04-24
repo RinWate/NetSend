@@ -6,12 +6,10 @@ using NetSend.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Avalonia.Controls.Notifications;
-using Ursa.Controls;
 
 namespace NetSend.ViewModels {
 	public partial class SettingsWindowViewModel : ViewModelBase {
-		
+
 		private Window? _window;
 
 		[ObservableProperty]
@@ -59,7 +57,7 @@ namespace NetSend.ViewModels {
 		[RelayCommand]
 		private void OpenProgramCatalog() {
 			var directory = Directory.GetCurrentDirectory();
-			if (Directory.Exists(directory)) { 
+			if (Directory.Exists(directory)) {
 				Process.Start("explorer.exe", directory);
 			}
 		}

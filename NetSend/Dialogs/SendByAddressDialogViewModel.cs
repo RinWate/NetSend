@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.Core;
@@ -7,11 +6,8 @@ using NetSend.Models;
 using NetSend.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NetSend.Dialogs {
@@ -24,7 +20,7 @@ namespace NetSend.Dialogs {
 		[ObservableProperty]
 		private IPAddress _address = IPAddress.None;
 
-		public SendByAddressDialogViewModel(string message) { 
+		public SendByAddressDialogViewModel(string message) {
 			Message = message;
 			Address = GetIpAddress();
 		}

@@ -2,7 +2,6 @@
 using NetSend.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 
@@ -106,7 +105,7 @@ namespace NetSend.Core {
 		#endregion
 
 		#region Messages
-		public void WriteMessage(string message) { 
+		public void WriteMessage(string message) {
 			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
 				var col = db.GetCollection<Message>("messages");
 				var messages = new List<Message> {
@@ -157,7 +156,7 @@ namespace NetSend.Core {
 			using (var db = new LiteDatabase(_settingsBase)) {
 				var col = db.GetCollection<Filter>("filters");
 				var result = new List<string>();
-				foreach (var filter in col.FindAll()) { 
+				foreach (var filter in col.FindAll()) {
 					result.Add(filter.filter);
 				}
 				return result;
@@ -223,7 +222,7 @@ namespace NetSend.Core {
 			}
 		}
 
-		public string ReadPseudoName(IPAddress address) { 
+		public string ReadPseudoName(IPAddress address) {
 			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
 				var col = db.GetCollection<Pseudoname>("pseudonames");
 				var foundedName = col.FindAll().FirstOrDefault(e => e.Address == address);
@@ -231,7 +230,7 @@ namespace NetSend.Core {
 			}
 		}
 
-		public List<Pseudoname> ReadAllPseudoNames() { 
+		public List<Pseudoname> ReadAllPseudoNames() {
 			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
 				var col = db.GetCollection<Pseudoname>("pseudonames");
 				var result = col.FindAll().ToList();

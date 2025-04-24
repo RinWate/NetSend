@@ -25,7 +25,7 @@ namespace NetSend.Core {
 			Parallel.ForEach(rangePartitioner, (range, state) => {
 				var byteIp = stringIp.GetAddressBytes();
 				for (int i = range.Item1; i < range.Item2; i++) {
-					byteIp[3] = (byte) i;
+					byteIp[3] = (byte)i;
 					var addr = new IPAddress(byteIp);
 					var isIgnored = Global.IgnoredRecipients.FirstOrDefault(e => e.Address.ToString() == addr.ToString()) != null;
 					if (isIgnored) continue;
@@ -47,9 +47,9 @@ namespace NetSend.Core {
 					}
 				}
 			});
-			
+
 			var result = temp_list.OrderBy(a => a.Hostname).Distinct(new AddressComparer()).ToList();
-			foreach (var temp in result) { 
+			foreach (var temp in result) {
 				Global.Recipients.Add(temp);
 			}
 

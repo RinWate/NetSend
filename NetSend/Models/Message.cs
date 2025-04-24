@@ -9,7 +9,7 @@ namespace NetSend.Models {
 		public string Content { get; set; } = string.Empty;
 
 
-		public Message(string message) { 
+		public Message(string message) {
 			SendDate = DateTime.Now;
 			Sender = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 			Content = message;

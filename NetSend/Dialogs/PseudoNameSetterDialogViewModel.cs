@@ -3,11 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetSend.Dialogs {
 	public partial class PseudoNameSetterDialogViewModel : ObservableObject, IDialogContext {
@@ -15,7 +11,7 @@ namespace NetSend.Dialogs {
 		public event EventHandler<object?>? RequestClose;
 		private IPAddress _address;
 
-		public PseudoNameSetterDialogViewModel(IPAddress address) { 
+		public PseudoNameSetterDialogViewModel(IPAddress address) {
 			_address = address;
 		}
 

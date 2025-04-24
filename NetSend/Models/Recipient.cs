@@ -15,18 +15,18 @@ namespace NetSend.Models {
 		public string Hostname { get; set; } = string.Empty;
 		public IPAddress Address { get; set; } = IPAddress.None;
 
-		public Recipient(string hostname, IPAddress address) { 
+		public Recipient(string hostname, IPAddress address) {
 			Hostname = hostname;
 			Address = address;
 		}
 
-		public Recipient(string pseudoname, string hostname, IPAddress address) { 
+		public Recipient(string pseudoname, string hostname, IPAddress address) {
 			PseudoName = pseudoname;
 			Hostname = hostname;
 			Address = address;
 		}
 
-		public Recipient(bool isFavourite, string pseudoname, string hostname, IPAddress address) { 
+		public Recipient(bool isFavourite, string pseudoname, string hostname, IPAddress address) {
 			IsFavourite = isFavourite;
 			PseudoName = pseudoname;
 			Hostname = hostname;

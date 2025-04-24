@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetSend.Core {
 	public static class Logger {
@@ -20,7 +17,7 @@ namespace NetSend.Core {
 		public static void LogList(List<string> exceptions) {
 			if (string.IsNullOrEmpty(_currentLog)) InitLog();
 			using (var sw = new StreamWriter(_currentLog, false)) {
-				foreach (var exception in exceptions) { 
+				foreach (var exception in exceptions) {
 					sw.WriteLine(exception);
 				}
 			}
