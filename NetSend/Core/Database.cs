@@ -24,6 +24,7 @@ namespace NetSend.Core {
 				var testMessage = new Message("TEST MESSAGE");
 				var messageId = col.Insert(new Message());
 				col.Delete(messageId);
+				db.Dispose();
 				return true;
 			} catch { return false; }
 		}
