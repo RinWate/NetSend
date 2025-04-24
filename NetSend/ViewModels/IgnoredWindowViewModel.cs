@@ -19,8 +19,15 @@ public partial class IgnoredWindowViewModel : ViewModelBase {
 		IgnoredRecipients = Global.IgnoredRecipients;
 	}
 
+	// TODO Дописать изменения комментарий. По какой-то причине не происходит запись в базу данных
 	partial void OnSelectedRecipientsChanged(List<IgnoredRecipient> value) {
 		new Database().UpdateIgnoredRecipient(value[0]);
+	}
+
+	partial void OnIgnoredRecipientsChanged(ObservableCollection<IgnoredRecipient> value) {
+		if (SelectedRecipients.Count != 0) {
+			new Database().UpdateIgnoredRecipient(SelectedRecipients[0]);
+		}
 	}
 
 	[RelayCommand]
