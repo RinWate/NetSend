@@ -12,9 +12,7 @@ public partial class SettingsWindow : Window {
     public SettingsWindow()
     {
         InitializeComponent();
-        viewModel = new SettingsWindowViewModel();
-        viewModel.ToastManager = new WindowToastManager(this) { MaxItems = 3 };
-
+        viewModel = new SettingsWindowViewModel(this);
         DataContext = viewModel;
     }
 }

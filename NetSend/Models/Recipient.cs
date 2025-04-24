@@ -1,12 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LiteDB;
 using System.Net;
 
 namespace NetSend.Models {
 	public class Recipient : ObservableObject {
 		public int Id { get; set; }
 
+		[BsonIgnore]
 		public bool IsIgnored { get; set; }
+		[BsonIgnore]
 		public bool IsFavourite { get; set; }
+		[BsonIgnore]
 		public string PseudoName { get; set; } = string.Empty;
 		public string Hostname { get; set; } = string.Empty;
 		public IPAddress Address { get; set; } = IPAddress.None;

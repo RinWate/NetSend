@@ -1,5 +1,6 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
@@ -15,6 +16,8 @@ using Ursa.Controls;
 
 namespace NetSend.ViewModels {
 	public partial class MainWindowViewModel : ViewModelBase {
+
+		public WindowToastManager? _toastManager;
 
 		[ObservableProperty]
 		private string _message;
@@ -130,6 +133,8 @@ namespace NetSend.ViewModels {
 
 			Settings.ReloadRecipients();
 			FilterRecipients();
+
+			_toastManager?.Show(new Toast("Найдено: " + FilteredItems.Count), NotificationType.Information, showIcon: true, showClose: true);
 		}
 
 		[RelayCommand]
@@ -141,7 +146,7 @@ namespace NetSend.ViewModels {
 				return;
 			}
 			var options = new DialogOptions() {
-				Title = "Массовая резня"
+				Title = Global.GetRandomTitle()
 			};
 			
 			var result = await Dialog.ShowCustomModal<ConfirmSendDialog, ConfirmSendDialogViewModel, object>(new ConfirmSendDialogViewModel("Сообщение будет отправлено ВСЕМ получателям. Вы уверены?"), options: options);
@@ -151,7 +156,7 @@ namespace NetSend.ViewModels {
 			if (isConfirmed) {
 				var sender = new Sender();
 				await sender.Send(Message, Global.GetMainWindow());
-				Global.StatusString = "Сообщение отправлено";
+				_toastManager?.Show(new Toast($"Отправлено {FilteredItems.Count} получателям"), NotificationType.Information, showIcon: true, showClose: true);
 			}
 		}
 
@@ -165,6 +170,7 @@ namespace NetSend.ViewModels {
 
 			var sender = new Sender();
 			await sender.Send(Message, Global.GetMainWindow(), SelectedRecipients.ToList());
+			_toastManager?.Show(new Toast("Сообщение отправлено"), NotificationType.Information, showIcon: true, showClose: true);
 		}
 
 		[RelayCommand]
@@ -198,11 +204,11 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void OpenSettings() {
+		public async Task OpenSettings() {
 			var newWindow = new SettingsWindow();
 			
 			var mainWindow = Global.GetMainWindow();
-			newWindow.ShowDialog(mainWindow);
+			await newWindow.ShowDialog(mainWindow);
 		}
 
 		[RelayCommand]

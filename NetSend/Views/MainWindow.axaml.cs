@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using NetSend.ViewModels;
+using Ursa.Controls;
 
 namespace NetSend.Views
 {
@@ -7,6 +9,9 @@ namespace NetSend.Views
         public MainWindow()
         {
             InitializeComponent();
+            var viewModel = new MainWindowViewModel();
+            viewModel._toastManager = new WindowToastManager(this);
+            DataContext = viewModel;
         }
     }
 }

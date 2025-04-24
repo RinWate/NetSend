@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace NetSend.Core {
@@ -31,14 +32,16 @@ namespace NetSend.Core {
 
 					try {
 						var ping = new Ping();
-						var reply = ping.Send(addr, 1);
+						var reply = ping.Send(addr, 2);
 						if (reply.Status == IPStatus.Success) {
-							var hostname = Dns.GetHostEntry(addr);
-							if (hostname != null) {
-								temp_list.Add(new Recipient(hostname.HostName, addr));
-								log($"Найден: {hostname.HostName} : {addr}");
-							}
+							var hostentry = Dns.GetHostEntry(addr);
+							temp_list.Add(new Recipient(hostentry.HostName, addr));
+							log($"Найден: {hostentry.HostName} : {addr}");
 						}
+					} catch (SocketException e) {
+						errors.Add($"{addr} : {e.Message}");
+						temp_list.Add(new Recipient("UNKNOWN", addr));
+						log($"Найден: UNKNOWN : {addr}");
 					} catch (Exception e) {
 						errors.Add($"{addr} : {e.Message}");
 					}

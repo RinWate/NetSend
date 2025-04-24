@@ -35,7 +35,8 @@ namespace NetSend.Core {
 		public void WriteSettings(List<Setting> settings) {
 			using (var db = new LiteDatabase(_settingsBase)) {
 				var col = db.GetCollection<Setting>("settings");
-				col.Upsert(settings);
+				col.DeleteAll();
+				col.Insert(settings);
 			}
 		}
 

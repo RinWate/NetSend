@@ -45,20 +45,20 @@
 
 				<StackPanel Spacing="5">
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<CheckBox Name="PseudoNames" Content="Общая база имен" IsChecked="{Binding PseudoNamesBase.isEnabled}"/>
+						<CheckBox Name="PseudoNames" Content="Общая база псевдонимов" IsChecked="{Binding PseudonamesBase.isEnabled}"/>
 						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения псевдонимов получателей. Если не задана, будет создана в каталоге программы"/>
 					</StackPanel>
 					<ursa:PathPicker AllowMultiple="False"
 									 FileFilter="[Псевдонимы,*.litedb]"
 									 IsEnabled="{Binding IsChecked, ElementName=PseudoNames}"
 									 UsePickerType="OpenFile"
-									 SelectedPathsText="{Binding PseudoNamesBase.Value}"
+									 SelectedPathsText="{Binding PseudonamesBase.Value}"
 									 Title="..."/>
 				</StackPanel>
 				
 				<StackPanel Spacing="5">
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<CheckBox Name="Ignored" Content="Общая база игнорируемых получателей"/>
+						<CheckBox Name="Ignored" Content="Общая база игнорируемых получателей" IsChecked="{Binding IgnoredBase.isEnabled}"/>
 						<HyperlinkButton Content="?" ToolTip.Tip="БД для хранения адресов, которые необходимо исключить из сканирования. Если на задана, будет создана в каталоге программы"/>
 					</StackPanel>
 					<ursa:PathPicker AllowMultiple="False"

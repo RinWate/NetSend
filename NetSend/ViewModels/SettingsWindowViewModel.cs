@@ -11,15 +11,15 @@ using Ursa.Controls;
 
 namespace NetSend.ViewModels {
 	public partial class SettingsWindowViewModel : ViewModelBase {
-
-		public WindowToastManager? ToastManager { get; set; } 
 		
+		private Window? _window;
+
 		[ObservableProperty]
 		private Setting _commonBase = new Setting("CommonBase", string.Empty, false);
 		[ObservableProperty]
 		private Setting _templatesBase = new Setting("TemplatesBase", string.Empty, false);
 		[ObservableProperty]
-		private Setting _pseudoNamesBase = new Setting("PseudoNamesBase", string.Empty, false);
+		private Setting _pseudonamesBase = new Setting("PseudonamesBase", string.Empty, false);
 		[ObservableProperty]
 		private Setting _ignoredBase = new Setting("IgnoredBase", string.Empty, false);
 		[ObservableProperty]
@@ -27,6 +27,7 @@ namespace NetSend.ViewModels {
 
 		public SettingsWindowViewModel(Window? parent = null) {
 			LoadSettingsCommand.Execute(null);
+			_window = parent;
 		}
 
 		[RelayCommand]
@@ -34,13 +35,12 @@ namespace NetSend.ViewModels {
 			var settings = new List<Setting>() {
 				CommonBase,
 				TemplatesBase,
-				PseudoNamesBase,
+				PseudonamesBase,
 				IgnoredBase,
 				DefaultFilter
 			};
 			Settings.WriteSettings(settings);
-			
-			ToastManager?.Show(new Toast("Настройки сохранены"), NotificationType.Success, showIcon: true, showClose: true);
+			_window?.Close();
 		}
 
 		[RelayCommand]
@@ -50,7 +50,7 @@ namespace NetSend.ViewModels {
 			if (settings != null && settings.Count > 0) {
 				CommonBase = Settings.FindSetting("CommonBase");
 				TemplatesBase = Settings.FindSetting("SettingsBase");
-				PseudoNamesBase = Settings.FindSetting("PseudoNamesBase");
+				PseudonamesBase = Settings.FindSetting("PseudonamesBase");
 				IgnoredBase = Settings.FindSetting("IgnoredBase");
 				DefaultFilter = Settings.FindSetting("DefaultFilter");
 			}
