@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+	<Application>
+		<!-- Указываем сборку и тип, у которого хотим сохранить конструктор -->
+		<Assembly Name="NetSend">
+			<Type Name="NetSend.Models.Recipient" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Filter" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Favourite" Dynamic="Required All" />
+			<Type Name="NetSend.Models.IgnoredRecipient" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Pseudoname" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Message" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Setting" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Template" Dynamic="Required All" />
+		</Assembly>
+	</Application>
+</Directives>

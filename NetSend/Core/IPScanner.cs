@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace NetSend.Core {
 	public class IPScanner {
 
-		public void Scan(string ip_filter, int threads, Action<string> log) {
+		public void Scan(string ip_filter, Action<string> log) {
 			Global.Recipients.Clear();
 			var temp_list = new ConcurrentBag<Recipient>();
 			var errors = new List<string>();

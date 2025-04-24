@@ -3,7 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-	<PublishAot>false</PublishAot>
+	<PublishAot>true</PublishAot>
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
 	<PublishTrimmed>true</PublishTrimmed>
 	<TrimMode>partial</TrimMode>
@@ -13,9 +13,14 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<RdXmlFile Include="rd.xml"/>
+	</ItemGroup>
+	
+	<ItemGroup>
 		<TrimmerRootAssembly Include="Irihi.Avalonia.Shared" />
 		<TrimmerRootAssembly Include="Ursa.Themes.Semi" />
 		<TrimmerRootAssembly Include="Avalonia.Controls.DataGrid" />
+		<TrimmerRootAssembly Include="LiteDB"/>
 	</ItemGroup>
 	
   <ItemGroup>

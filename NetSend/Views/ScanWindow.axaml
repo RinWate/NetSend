@@ -21,20 +21,6 @@
 				Command="{Binding ScanCommand}"
 				CommandParameter="{Binding Text, ElementName=Mask}">
 		</Button>
-		<StackPanel Grid.Column="1"
-					Spacing="5"
-					Orientation="Horizontal">
-			<Label Content="Макс. потоков"
-				   VerticalAlignment="Center"/>
-			<NumericUpDown Width="75"
-						   Value="{Binding Threads}"
-						   ClipValueToMinMax="True"
-						   Minimum="1"
-						   Maximum="64"
-						   Increment="1"
-						   ToolTip.Tip="Сколько процессов одновременно будут сканировать сеть. Чем выше число, тем быстрее сканирование">
-			</NumericUpDown>
-		</StackPanel>
 		<ursa:AutoCompleteBox Grid.Column="3"
 							  Name="Mask"
 							  Width="150"

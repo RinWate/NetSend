@@ -22,8 +22,8 @@ namespace NetSend
 
 		public override void OnFrameworkInitializationCompleted()
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+
                 Settings.RegisterAdditionalMappings();
                 Settings.LoadSettings();
                 Settings.LoadIgnoredRecipients();

@@ -74,7 +74,6 @@
 			<ListBox Grid.Row="0"
 					 FontSize="12"
 					 SelectionMode="Multiple"
-					 IsTextSearchEnabled="True"
 					 VerticalAlignment="Stretch"
 					 HorizontalAlignment="Stretch"
 					 SelectedItems="{Binding SelectedRecipients}"
@@ -106,7 +105,7 @@
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
-			<TextBox Name="Filter" Grid.Row="1" Watermark="Поиск..." Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBox Name="Filter" Classes="clearButton" Grid.Row="1" Watermark="Поиск..." Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 		</Grid>
 
 		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>

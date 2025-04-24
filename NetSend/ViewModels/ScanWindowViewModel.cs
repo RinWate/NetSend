@@ -17,8 +17,6 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private bool _isScanning = false;
 		[ObservableProperty]
-		private int _threads = 32;
-		[ObservableProperty]
 		private List<string> _filters;
 		[ObservableProperty]
 		private string _filter = string.Empty;
@@ -43,7 +41,7 @@ namespace NetSend.ViewModels {
 
 			try {
 				var address = IPAddress.Parse(ipAddress);
-			} catch (Exception ex) {
+			} catch {
 				Log += "Некорректный формат фильтра!" + Environment.NewLine;
 				return;
 			}
@@ -54,7 +52,7 @@ namespace NetSend.ViewModels {
 			Log += "Сканирование начато..." + Environment.NewLine;
 			DateTime startTime = DateTime.Now;
 			await Task.Run(() => {
-				scanner.Scan(ipAddress, Threads, (message) => {
+				scanner.Scan(ipAddress, (message) => {
 					Avalonia.Threading.Dispatcher.UIThread.Post(() => {
 						Log += message + Environment.NewLine;
 					});
