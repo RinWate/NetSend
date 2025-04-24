@@ -31,7 +31,7 @@
 				<MenuItem Header="Черный список" Command="{Binding OpenIgnoredListCommand}"/>
 				<Separator/>
 				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
-				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}"></MenuItem>
+				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}" IsEnabled="False"></MenuItem>
 				<Separator/>
 				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
 			</MenuItem>

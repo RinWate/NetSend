@@ -18,17 +18,21 @@ namespace NetSend.Core {
 			IgnoredBase,
 		}
 
+		public bool CheckAccess() {
+			try {
+				var db = new LiteDatabase(GetDatabase(Databases.CommonBase));
+				var col = db.GetCollection<Message>("messages");
+				var testMessage = new Message("TEST MESSAGE");
+				var messageId = col.Insert(new Message());
+				col.Delete(messageId);
+				return true;
+			} catch { return false; }
+		}
+
 		private string GetDatabase(Databases database) {
 			Settings.GetValue(database.ToString(), out string value);
 			if (string.IsNullOrWhiteSpace(value)) return $"{database.ToString()}.litedb";
 			else return value;
-		}
-		public void WriteSetting(Setting setting) {
-			using (var db = new LiteDatabase(_settingsBase)) {
-				var col = db.GetCollection<Setting>("settings");
-				var newSetting = new List<Setting>();
-				col.Upsert(setting);
-			}
 		}
 
 		public void WriteSettings(List<Setting> settings) {
@@ -36,15 +40,6 @@ namespace NetSend.Core {
 				var col = db.GetCollection<Setting>("settings");
 				col.DeleteAll();
 				col.Insert(settings);
-			}
-		}
-
-		public Setting ReadSetting(string name) {
-			using (var db = new LiteDatabase(_settingsBase)) {
-				var col = db.GetCollection<Setting>("settings");
-				var result = col.Find(name).FirstOrDefault();
-				if (result == null) throw new Exception("Setting not found");
-				return result;
 			}
 		}
 
