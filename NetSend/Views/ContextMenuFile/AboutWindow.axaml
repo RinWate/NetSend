@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:NetSend"
+        xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300" 
+		Width="500" Height="300"
+        WindowStartupLocation="CenterScreen"
+        x:Class="NetSend.AboutWindow"
+		x:DataType="vm:AboutWindowViewModel"
+        Title="О программе">
+
+	<Grid ColumnDefinitions="100, *"
+		  RowDefinitions="*, auto"
+		  ColumnSpacing="5"
+		  RowSpacing="5"
+		  Margin="5">
+		<StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center">
+			<Image Source="/Assets/avalonia-logo.ico" RenderOptions.BitmapInterpolationMode="HighQuality"></Image>
+			<Label Content="{Binding Source={x:Static local:Global.VERSION}}"
+			       HorizontalContentAlignment="Center"></Label>
+		</StackPanel>
+		<Grid Grid.Row="0" Grid.Column="1" RowDefinitions="*, *,Auto">
+			<StackPanel Grid.Row="0">
+				<TextBlock FontSize="24" FontWeight="Bold" Text="NetSend"></TextBlock>
+				<TextBlock Text="Программа для рассылки сообщений с помощью встроенной в Windows утилиты msg.exe" TextWrapping="Wrap"></TextBlock>
+			</StackPanel>
+			<StackPanel Grid.Row="1">
+				<TextBlock>
+					Используемые библиотеки:<LineBreak/>
+					<Run Text="- Avalonia UI v.11.3.0-rc1" FontWeight="DemiBold"/> <LineBreak/>
+					<Run Text="- Irihi.Ursa 1.11.0" FontWeight="DemiBold"/> <LineBreak/>
+					<Run Text="- LiteDB v. 5.0.21" FontWeight="DemiBold"/> <LineBreak/>
+					<Run Text="- CommunityToolkit.MVVM v. 8.4.0" FontWeight="DemiBold"/>
+				</TextBlock>
+			</StackPanel>
+			<StackPanel Grid.Row="2" Grid.Column="0">
+				<HyperlinkButton Content="GitHub" Command="{Binding OpenGitHubCommand}"></HyperlinkButton>
+			</StackPanel>
+		</Grid>
+		<StackPanel Grid.Column="0" 
+		            Grid.Row="1"
+		            Grid.ColumnSpan="2"
+		            HorizontalAlignment="Center">
+			<Button Content="Закрыть" Command="{Binding CloseWindowCommand}"/>
+		</StackPanel>
+		
+	</Grid>
+	
+</Window>

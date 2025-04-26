@@ -38,7 +38,7 @@ namespace NetSend.ViewModels {
 				DefaultFilter
 			};
 			Settings.WriteSettings(settings);
-			_window?.Close();
+			_window?.Close(true);
 		}
 
 		[RelayCommand]

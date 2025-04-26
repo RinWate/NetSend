@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 
 namespace NetSend.ViewModels {
@@ -6,6 +7,14 @@ namespace NetSend.ViewModels {
 
 		public AboutWindowViewModel(Window? parent) {
 			if (parent != null) window = parent;
+		}
+
+		[RelayCommand]
+		public void OpenGitHub() {
+			Process.Start(new ProcessStartInfo {
+				FileName = "https://github.com/RinWate",
+				UseShellExecute = true
+			});
 		}
 
 		[RelayCommand]

@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dialog="clr-namespace:NetSend.Dialogs"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="285" Width="400" Height="300"
+             x:Class="NetSend.Dialogs.AddRecipientDialog"
+             x:DataType="dialog:AddRecipientDialogViewModel">
+    <Grid RowDefinitions="50, *, Auto" Margin="10">
+        <StackPanel Grid.Row="1" Spacing="10">
+            <StackPanel Spacing="5">
+                <Label Content="Псевдоним:"></Label>
+                <TextBox Name="tb_pseudoname" Text="{Binding Pseudoname}" Watermark="Необязательно..."></TextBox>
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <Label Content="Доменное имя:"></Label>
+                <TextBox Text="{Binding DomainName}"></TextBox>
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <Label Content="Адрес:"></Label>
+                <TextBox Text="{Binding Address}"></TextBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="2"
+                    Spacing="10"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Classes="Success" 
+                    Content="Добавить"
+                    HotKey="Enter"
+                    Command="{Binding AddCommand}"></Button>
+            <Button Content="Отмена"
+                    HotKey="Escape"
+                    Command="{Binding CancelCommand}"></Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

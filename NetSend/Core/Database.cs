@@ -17,18 +17,6 @@ namespace NetSend.Core {
 			IgnoredBase,
 		}
 
-		public bool CheckAccess() {
-			try {
-				var db = new LiteDatabase(GetDatabase(Databases.CommonBase));
-				var col = db.GetCollection<Message>("messages");
-				var testMessage = new Message("TEST MESSAGE");
-				var messageId = col.Insert(new Message());
-				col.Delete(messageId);
-				db.Dispose();
-				return true;
-			} catch { return false; }
-		}
-
 		private string GetDatabase(Databases database) {
 			Settings.GetValue(database.ToString(), out string value);
 			if (string.IsNullOrWhiteSpace(value)) return $"{database.ToString()}.litedb";
@@ -172,6 +160,20 @@ namespace NetSend.Core {
 			}
 		}
 
+		public void WriteRecipient(Recipient recipient) {
+			if (recipient == null) return;
+
+			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
+				var col = db.GetCollection<Recipient>("recipients");
+				var founded = col.FindOne(r => r.Address == recipient.Address);
+				if (founded == null) col.Insert(recipient);
+				else {
+					recipient.Id = founded.Id;
+					col.Update(recipient);
+				}
+			}
+		}
+
 		public List<Recipient> ReadRecipients() {
 
 			var pseudonames = ReadAllPseudoNames();
@@ -204,7 +206,7 @@ namespace NetSend.Core {
 
 		#endregion
 
-		#region PseudoNames
+		#region Pseudonames
 
 		public void WritePseudoName(IPAddress address, string pseudoName) {
 			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
@@ -241,13 +243,6 @@ namespace NetSend.Core {
 			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
 				var col = db.GetCollection<IgnoredRecipient>("ignored");
 				col.Upsert(ignoredRecipients);
-			}
-		}
-
-		public void RemoveRecipientFromIgnore(int id) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
-				var col = db.GetCollection<IgnoredRecipient>("ignored");
-				col.Delete(id);
 			}
 		}
 

@@ -32,6 +32,8 @@ namespace NetSend.Models {
 			Hostname = hostname;
 			Address = address;
 		}
+		
+		public Recipient() {}
 
 		public override string? ToString() {
 			if (string.IsNullOrWhiteSpace(PseudoName)) return $"{Hostname} : {Address}";

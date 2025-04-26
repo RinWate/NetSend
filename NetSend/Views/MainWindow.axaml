@@ -31,7 +31,7 @@
 				<MenuItem Header="Черный список" Command="{Binding OpenIgnoredListCommand}"/>
 				<Separator/>
 				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
-				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}" IsEnabled="False"></MenuItem>
+				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}"></MenuItem>
 				<Separator/>
 				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
 			</MenuItem>
@@ -41,11 +41,18 @@
 		</Menu>
 		<Grid ColumnSpacing="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
 			  ColumnDefinitions="auto, auto, auto">
-			<Button Grid.Column="0"
-					Grid.Row="0"
-					Content="Сканировать"
-					Command="{Binding ScanCommand}"/>
-			<SplitButton Grid.Column="1" Grid.Row="0" Content="Отправить выбранным" Command="{Binding SendCommand}">
+			<SplitButton Grid.Column="0" Grid.Row="0" 
+			             Content="Сканировать" 
+			             Command="{Binding ScanCommand}">
+				<SplitButton.Flyout>
+					<MenuFlyout>
+						<MenuItem Header="Добавить вручную..." Command="{Binding AddManualCommand}"></MenuItem>
+					</MenuFlyout>
+				</SplitButton.Flyout>
+			</SplitButton>
+			<SplitButton Grid.Column="1" Grid.Row="0" 
+			             Content="Отправить выбранным" 
+			             Command="{Binding SendCommand}">
 				<SplitButton.Flyout>
 					<MenuFlyout>
 						<MenuItem Header="Всем" Command="{Binding SendAllCommand}"/>
@@ -109,7 +116,6 @@
 		</Grid>
 
 		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>
-		<Label Grid.Column="1" Grid.Row="3" Content="{Binding Source={x:Static local:Global.StatusString}}"/>
 
 	</Grid>
 	

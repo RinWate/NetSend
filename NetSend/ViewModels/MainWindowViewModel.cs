@@ -37,6 +37,7 @@ namespace NetSend.ViewModels {
 		}
 
 		private void FilterRecipients() {
+			if (Global.Recipients.Count == 0) return;
 			if (string.IsNullOrWhiteSpace(SearchText)) {
 				var tempList = Global.Recipients.OrderByDescending(x => x.IsFavourite)
 					.ThenBy(x => x.Hostname);
@@ -58,11 +59,10 @@ namespace NetSend.ViewModels {
 			SelectedRecipients = new ObservableCollection<Recipient>();
 
 			FilterRecipients();
-			Global.StatusString = "Сканирование не выполнялось";
 		}
 
 		[RelayCommand]
-		public void AddRecipientToIgnoreList() {
+		private void AddRecipientToIgnoreList() {
 			var selected = SelectedRecipients;
 			var ignored = new List<IgnoredRecipient>();
 			foreach (var recipient in selected) {
@@ -76,7 +76,7 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public async Task SetPseudoName() {
+		private async Task SetPseudoName() {
 
 			var selectedRecipient = SelectedRecipients[0];
 
@@ -93,7 +93,7 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void ClearPseudoName() {
+		private void ClearPseudoName() {
 			var selectedRecipient = SelectedRecipients[0];
 			new Database().WritePseudoName(selectedRecipient.Address, string.Empty);
 			Settings.ReloadRecipients();
@@ -101,7 +101,7 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void AddInFavourite() {
+		private void AddInFavourite() {
 			var selectedRecipient = SelectedRecipients;
 			foreach (var recipient in selectedRecipient) {
 				recipient.IsFavourite = true;
@@ -112,7 +112,7 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void RemoveInFavourite() {
+		private void RemoveInFavourite() {
 			var selectedRecipient = SelectedRecipients;
 			foreach (var recipient in selectedRecipient) {
 				recipient.IsFavourite = false;
@@ -123,34 +123,33 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public async Task Scan() {
+		private async Task Scan() {
 			var newScan = new ScanWindow();
 
 			var mainWindow = Global.GetMainWindow();
-			await newScan.ShowDialog(mainWindow);
+			var success = await newScan.ShowDialog<bool>(mainWindow);
 
 			Settings.ReloadRecipients();
 			FilterRecipients();
 
-			_toastManager?.Show(new Toast("Найдено: " + FilteredItems.Count), NotificationType.Information, showIcon: true, showClose: true);
+			if (success) {
+				_toastManager?.Show(new Toast("Найдено: " + FilteredItems.Count), NotificationType.Information, showIcon: true, showClose: true);
+			}
 		}
 
 		[RelayCommand]
-		public async Task SendAll() {
+		private async Task SendAll() {
 
 			bool isFilled = CheckFill();
 			if (!isFilled) {
-				await MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error, MessageBoxButton.OK);
+				await MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error);
 				return;
 			}
-			var options = new DialogOptions() {
+			var options = new DialogOptions {
 				Title = Global.GetRandomTitle()
 			};
 
-			var result = await Dialog.ShowCustomModal<ConfirmSendDialog, ConfirmSendDialogViewModel, object>(new ConfirmSendDialogViewModel("Сообщение будет отправлено ВСЕМ получателям. Вы уверены?"), options: options);
-			if (result is not bool) return;
-
-			var isConfirmed = (bool)result;
+			var isConfirmed = await Dialog.ShowCustomModal<ConfirmSendDialog, ConfirmSendDialogViewModel, bool>(new ConfirmSendDialogViewModel("Сообщение будет отправлено ВСЕМ получателям. Вы уверены?"), options: options);
 			if (isConfirmed) {
 				var sender = new Sender();
 				await sender.Send(Message, Global.GetMainWindow());
@@ -159,7 +158,7 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public async Task Send() {
+		private async Task Send() {
 			bool isFilled = CheckFill();
 			if (!isFilled) {
 				await MessageBox.ShowAsync("Не заполнено сообщение или отсутствуют адресаты", "Отказ", MessageBoxIcon.Error);
@@ -172,14 +171,14 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public async Task SendToAddress() {
+		private async Task SendToAddress() {
 			bool isFilled = !string.IsNullOrEmpty(Message);
 			if (!isFilled) {
 				await MessageBox.ShowAsync("Не заполнено сообщение!", "Отказ", MessageBoxIcon.Error);
 				return;
 			}
 
-			var options = new DialogOptions() {
+			var options = new DialogOptions {
 				Title = "Отправить по адресу"
 			};
 
@@ -187,14 +186,28 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void OpenHistory() {
+		private async Task AddManual() {
+			var options = new DialogOptions {
+				Title = "Добавление получателя"
+			};
+			
+			var isSuccess = await Dialog.ShowCustomModal<AddRecipientDialog, AddRecipientDialogViewModel, bool>(new AddRecipientDialogViewModel(), options: options);
+
+			if (isSuccess) {
+				Settings.ReloadRecipients();
+				FilterRecipients();
+			}
+		}
+		
+		[RelayCommand]
+		private void OpenHistory() {
 			var newWindow = new MessageHistoryWindow(this);
 			var mainWindow = Global.GetMainWindow();
 			newWindow.Show(mainWindow);
 		}
 
 		[RelayCommand]
-		public async Task OpenAbout() {
+		private async Task OpenAbout() {
 			var newWindow = new AboutWindow();
 
 			var mainWindow = Global.GetMainWindow();
@@ -202,15 +215,18 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public async Task OpenSettings() {
+		private async Task OpenSettings() {
 			var newWindow = new SettingsWindow();
 
 			var mainWindow = Global.GetMainWindow();
-			await newWindow.ShowDialog(mainWindow);
+			var wasSaved = await newWindow.ShowDialog<bool>(mainWindow);
+			if (wasSaved) {
+				_toastManager?.Show(new Toast("Настройки сохранены"), NotificationType.Success, showIcon: true, showClose: true);
+			}
 		}
 
 		[RelayCommand]
-		public async Task OpenIgnoredList() {
+		private async Task OpenIgnoredList() {
 			var newWindow = new IgnoredWindow();
 
 			var mainWindow = Global.GetMainWindow();
@@ -221,7 +237,7 @@ namespace NetSend.ViewModels {
 		}
 
 		[RelayCommand]
-		public void Exit() {
+		private void Exit() {
 			var mainWindow = Global.GetMainWindow();
 			mainWindow.Close();
 		}

@@ -22,6 +22,10 @@ public partial class IgnoredWindowViewModel : ViewModelBase {
 		IgnoredRecipients = Global.IgnoredRecipients;
 	}
 
+	partial void OnIgnoredRecipientsChanged(ObservableCollection<IgnoredRecipient> value) {
+		IgnoredRecipients = Global.IgnoredRecipients;
+	}
+
 	[RelayCommand]
 	private void ClearIgnoredRecipients() {
 		new Database().RemoveAllIgnoredRecipients();
@@ -31,7 +35,6 @@ public partial class IgnoredWindowViewModel : ViewModelBase {
 	private void RemoveFromIgnore() {
 		new Database().RemoveRecipientsFromIgnore(SelectedRecipients);
 		Settings.LoadIgnoredRecipients();
-		IgnoredRecipients = Global.IgnoredRecipients;
 	}
 
 }

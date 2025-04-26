@@ -51,4 +51,23 @@
     <PackageReference Include="Semi.Avalonia" Version="11.2.1.7" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.2.1.7" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ContextMenuFile\AboutWindow.axaml.cs">
+      <DependentUpon>AboutWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ContextMenuFile\IgnoredWindow.axaml.cs">
+      <DependentUpon>IgnoredWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Utility\AccessErrorWindow.axaml.cs">
+      <DependentUpon>AccessErrorWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Utility\LongProcessWindow.axaml.cs">
+      <DependentUpon>LongProcessWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

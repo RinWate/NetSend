@@ -5,6 +5,7 @@ using NetSend.Core;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NetSend.ViewModels {
@@ -19,6 +20,8 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private string _filter = string.Empty;
 
+		public CancellationTokenSource _cts;
+
 		public ScanWindowViewModel(Window? parent = null) {
 			var db = new Database();
 			Filters = db.GetAllFilters();
@@ -27,18 +30,21 @@ namespace NetSend.ViewModels {
 			Filter = value;
 
 			if (parent != null) window = parent;
+
+			ScanCommand.ExecuteAsync(Filter);
 		}
 
 		[RelayCommand]
-		public async Task Scan(string ipAddress) {
-
+		private async Task Scan(string ipAddress) {
+			_cts = new CancellationTokenSource();
+			var token = _cts.Token;
 			if (string.IsNullOrWhiteSpace(ipAddress)) {
 				Log += "Не введен фильтр!" + Environment.NewLine;
 				return;
 			}
 
 			try {
-				var address = IPAddress.Parse(ipAddress);
+				IPAddress.Parse(ipAddress);
 			} catch {
 				Log += "Некорректный формат фильтра!" + Environment.NewLine;
 				return;
@@ -48,21 +54,22 @@ namespace NetSend.ViewModels {
 			var scanner = new IPScanner();
 
 			Log += "Сканирование начато..." + Environment.NewLine;
-			DateTime startTime = DateTime.Now;
 			await Task.Run(() => {
 				scanner.Scan(ipAddress, (message) => {
+					if (token.IsCancellationRequested) return;
 					Avalonia.Threading.Dispatcher.UIThread.Post(() => {
 						Log += message + Environment.NewLine;
 					});
 				});
-			});
-			DateTime endTime = DateTime.Now;
-			var timeResult = (endTime - startTime).TotalSeconds;
+			}, token);
 			IsScanning = false;
 
 			new Database().WriteFilter(ipAddress);
-			window?.Close();
+			window?.Close(true);
 		}
 
+		public void CancelScan() {
+			_cts?.Cancel();
+		}
 	}
 }
