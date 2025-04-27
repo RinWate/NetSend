@@ -20,7 +20,7 @@ namespace NetSend.ViewModels {
 		[ObservableProperty]
 		private string _filter = string.Empty;
 
-		public CancellationTokenSource _cts;
+		private CancellationTokenSource? _cts;
 
 		public ScanWindowViewModel(Window? parent = null) {
 			var db = new Database();
@@ -60,7 +60,7 @@ namespace NetSend.ViewModels {
 					Avalonia.Threading.Dispatcher.UIThread.Post(() => {
 						Log += message + Environment.NewLine;
 					});
-				});
+				}, token);
 			}, token);
 			IsScanning = false;
 
