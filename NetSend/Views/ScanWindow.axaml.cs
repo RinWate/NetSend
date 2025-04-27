@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Controls;
+using NetSend.Core.Enums;
 using NetSend.ViewModels;
 
 namespace NetSend;

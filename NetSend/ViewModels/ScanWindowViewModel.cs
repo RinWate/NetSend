@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using NetSend.Core.Enums;
 
 namespace NetSend.ViewModels {
 	public partial class ScanWindowViewModel : ViewModelBase {
@@ -65,7 +66,7 @@ namespace NetSend.ViewModels {
 			IsScanning = false;
 
 			new Database().WriteFilter(ipAddress);
-			window?.Close(true);
+			window?.Close(ScanResult.Success);
 		}
 
 		public void CancelScan() {

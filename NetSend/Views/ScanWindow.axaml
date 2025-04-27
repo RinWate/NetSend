@@ -21,7 +21,7 @@
 				Command="{Binding ScanCommand}"
 				CommandParameter="{Binding Text, ElementName=Mask}">
 		</Button>
-		<ursa:AutoCompleteBox Grid.Column="3"
+		<ursa:AutoCompleteBox Grid.Row="0" Grid.Column="3"
 							  Name="Mask"
 							  Width="150"
 							  Watermark="Фильтр подсети..."
