@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
 
 namespace NetSend.ViewModels {
 	public partial class AboutWindowViewModel : ViewModelBase {

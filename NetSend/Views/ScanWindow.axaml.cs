@@ -1,14 +1,13 @@
-using System;
 using Avalonia.Controls;
-using NetSend.Core.Enums;
 using NetSend.ViewModels;
+using System;
 
 namespace NetSend;
 
 public partial class ScanWindow : Window {
-	
+
 	private readonly ScanWindowViewModel _viewModel;
-	
+
 	public ScanWindow() {
 		InitializeComponent();
 		_viewModel = new ScanWindowViewModel(this);

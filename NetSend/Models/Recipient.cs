@@ -1,10 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LiteDB;
+﻿using LiteDB;
 using System.Net;
 
 namespace NetSend.Models {
-	public class Recipient : ObservableObject {
-		public int Id { get; set; }
+	public class Recipient : Model {
 
 		[BsonIgnore]
 		public bool IsIgnored { get; set; }
@@ -32,8 +30,8 @@ namespace NetSend.Models {
 			Hostname = hostname;
 			Address = address;
 		}
-		
-		public Recipient() {}
+
+		public Recipient() { }
 
 		public override string? ToString() {
 			if (string.IsNullOrWhiteSpace(PseudoName)) return $"{Hostname} : {Address}";

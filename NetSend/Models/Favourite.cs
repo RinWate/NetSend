@@ -1,9 +1,8 @@
 ﻿using System.Net;
 
 namespace NetSend.Models {
-	public sealed class Favourite(IPAddress address) {
+	public sealed class Favourite(IPAddress address) : Model {
 
-		public int Id { get; set; }
 		public IPAddress Address { get; set; } = address;
 	}
 }

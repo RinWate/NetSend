@@ -17,14 +17,14 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<RdXmlFile Include="rd.xml"/>
+		<RdXmlFile Include="rd.xml" />
 	</ItemGroup>
 	
 	<ItemGroup>
 		<TrimmerRootAssembly Include="Irihi.Avalonia.Shared" />
 		<TrimmerRootAssembly Include="Ursa.Themes.Semi" />
 		<TrimmerRootAssembly Include="Avalonia.Controls.DataGrid" />
-		<TrimmerRootAssembly Include="LiteDB"/>
+		<TrimmerRootAssembly Include="LiteDB" />
 	</ItemGroup>
 	
   <ItemGroup>

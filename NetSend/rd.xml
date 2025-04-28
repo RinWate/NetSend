@@ -11,6 +11,7 @@
 			<Type Name="NetSend.Models.Message" Dynamic="Required All" />
 			<Type Name="NetSend.Models.Setting" Dynamic="Required All" />
 			<Type Name="NetSend.Models.Template" Dynamic="Required All" />
+			<Type Name="NetSend.Models.Schedule" Dynamic="Required All" />
 		</Assembly>
 	</Application>
 </Directives>

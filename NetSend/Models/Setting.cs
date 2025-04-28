@@ -1,7 +1,5 @@
 ﻿namespace NetSend.Models {
-	public class Setting(string name, string value, bool isEnabled) {
-
-		public int Id { get; set; }
+	public class Setting(string name, string value, bool isEnabled) : Model {
 
 		public bool isEnabled { get; set; } = isEnabled;
 

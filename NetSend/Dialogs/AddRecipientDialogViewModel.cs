@@ -1,57 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.Core;
 using NetSend.Models;
 using NetSend.ViewModels;
+using System;
+using System.Net;
 
 namespace NetSend.Dialogs;
 
 public partial class AddRecipientDialogViewModel : ViewModelBase, IDialogContext {
-    
-    [ObservableProperty] private string _pseudoname = string.Empty;
-    [ObservableProperty] private string _domainName = string.Empty;
-    [ObservableProperty] private string _address = string.Empty;
 
-    [RelayCommand]
-    private void Add() {
-        var newRecipient = new Recipient();
+	[ObservableProperty] private string _pseudoname = string.Empty;
+	[ObservableProperty] private string _domainName = string.Empty;
+	[ObservableProperty] private string _address = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(DomainName) || string.IsNullOrWhiteSpace(Address)) {
-            return;
-        }
+	[RelayCommand]
+	private void Add() {
+		var newRecipient = new Recipient();
 
-        IPAddress address;
-        try {
-            address = IPAddress.Parse(Address);
-        } catch {
-            return;
-        }
+		if (string.IsNullOrWhiteSpace(DomainName) || string.IsNullOrWhiteSpace(Address)) {
+			return;
+		}
 
-        newRecipient.Hostname = DomainName;
-        newRecipient.Address = address;
+		IPAddress address;
+		try {
+			address = IPAddress.Parse(Address);
+		} catch {
+			return;
+		}
 
-        var db = new Database();
-        if (string.IsNullOrWhiteSpace(Pseudoname)) {
-            db.WriteRecipient(newRecipient);
-        } else {
-            db.WriteRecipient(newRecipient);
-            db.WritePseudoName(newRecipient.Address, Pseudoname);
-        }
-        RequestClose?.Invoke(this, true);
-    }
+		newRecipient.Hostname = DomainName;
+		newRecipient.Address = address;
 
-    [RelayCommand]
-    private void Cancel() {
-        RequestClose?.Invoke(this, false);
-    }
-    
-    public void Close() {
-        RequestClose?.Invoke(this, false);
-    }
+		var db = new Database();
+		db.WriteRecipient(newRecipient);
 
-    public event EventHandler<object?>? RequestClose;
+		if (!string.IsNullOrWhiteSpace(Pseudoname)) {
+			db.WritePseudoName(newRecipient.Address, Pseudoname);
+		}
+		RequestClose?.Invoke(this, true);
+	}
+
+	[RelayCommand]
+	private void Cancel() {
+		RequestClose?.Invoke(this, false);
+	}
+
+	public void Close() {
+		RequestClose?.Invoke(this, false);
+	}
+
+	public event EventHandler<object?>? RequestClose;
 }

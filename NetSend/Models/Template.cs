@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace NetSend.Models {
-	public class Template(string name, string author, string text, List<TemplateParameter> parameters) {
-		public int Id { get; set; }
+	public class Template(string name, string author, string text, List<TemplateParameter> parameters) : Model {
 
 		public string Name { get; set; } = name;
 		public string Author { get; set; } = author;

@@ -2,12 +2,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
+using NetSend.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using NetSend.Core.Enums;
 
 namespace NetSend.ViewModels {
 	public partial class ScanWindowViewModel : ViewModelBase {

@@ -17,7 +17,7 @@ namespace NetSend.Core {
 			IgnoredBase,
 		}
 
-		private string GetDatabase(Databases database) {
+		private string GetDatabasePath(Databases database) {
 			Settings.GetValue(database.ToString(), out string value);
 			if (string.IsNullOrWhiteSpace(value)) return $"{database.ToString()}.litedb";
 			else return value;
@@ -25,7 +25,7 @@ namespace NetSend.Core {
 
 		public void WriteSettings(List<Setting> settings) {
 			using (var db = new LiteDatabase(_settingsBase)) {
-				var col = db.GetCollection<Setting>("settings");
+				var col = db.GetCollection<Setting>(Tables.Settings);
 				col.DeleteAll();
 				col.Insert(settings);
 			}
@@ -33,22 +33,44 @@ namespace NetSend.Core {
 
 		public List<Setting> ReadSettings() {
 			using (var db = new LiteDatabase(_settingsBase)) {
-				var col = db.GetCollection<Setting>("settings");
+				var col = db.GetCollection<Setting>(Tables.Settings);
 				var result = col.FindAll().ToList();
 				return result;
 			}
 		}
 
+		#region Scheduler
+
+		public void WriteToScheduler(List<Message> messages) {
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Schedule>(Tables.Schedules);
+			}
+		}
+
+		public void ReadScheduleById(int id) {
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Schedule>(Tables.Schedules);
+			}
+		}
+
+		public void RemoveAllSchedules() {
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Schedule>(Tables.Schedules);
+			}
+		}
+
+		#endregion
+
 		#region Templates
 
 		public void WriteTemplate(Template template) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.TemplatesBase))) {
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.TemplatesBase))) {
 				var col = db.GetCollection<Template>("templates");
 			}
 		}
 
 		public List<Template> ReadTemplates() {
-			using (var db = new LiteDatabase(GetDatabase(Databases.TemplatesBase))) {
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.TemplatesBase))) {
 				var col = db.GetCollection<Template>("templates");
 			}
 
@@ -61,7 +83,7 @@ namespace NetSend.Core {
 
 		public void SetFavourite(List<Recipient> recipients) {
 			using (var db = new LiteDatabase(_favouritesBase)) {
-				var col = db.GetCollection<Favourite>("favourites");
+				var col = db.GetCollection<Favourite>(Tables.Favourites);
 				var favourites = new List<Favourite>();
 				foreach (var recipient in recipients) {
 					favourites.Add(new Favourite(recipient.Address));
@@ -72,7 +94,7 @@ namespace NetSend.Core {
 
 		public void ClearFavourite(List<Recipient> recipients) {
 			using (var db = new LiteDatabase(_favouritesBase)) {
-				var col = db.GetCollection<Favourite>("favourites");
+				var col = db.GetCollection<Favourite>(Tables.Favourites);
 				var addresses = recipients.Select(e => e.Address).ToHashSet();
 				col.DeleteMany(e => addresses.Contains(e.Address));
 			}
@@ -80,7 +102,7 @@ namespace NetSend.Core {
 
 		public List<Favourite> ReadAllFavourites() {
 			using (var db = new LiteDatabase(_favouritesBase)) {
-				var col = db.GetCollection<Favourite>("favourites");
+				var col = db.GetCollection<Favourite>(Tables.Favourites);
 				return col.FindAll().ToList();
 			}
 		}
@@ -89,8 +111,8 @@ namespace NetSend.Core {
 
 		#region Messages
 		public void WriteMessage(string message) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Message>("messages");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Message>(Tables.Messages);
 				var messages = new List<Message> {
 					new Message(message)
 				};
@@ -100,23 +122,23 @@ namespace NetSend.Core {
 		}
 
 		public List<Message> AllMessages() {
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Message>("messages");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Message>(Tables.Messages);
 				var messages = col.FindAll().OrderByDescending(a => a.SendDate).ToList();
 				return messages;
 			}
 		}
 
 		public void ClearMessages() {
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Message>("messages");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Message>(Tables.Messages);
 				col.DeleteAll();
 			}
 		}
 
 		public void DeleteMessage(int id) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Message>("messages");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Message>(Tables.Messages);
 				col.Delete(id);
 			}
 		}
@@ -127,7 +149,7 @@ namespace NetSend.Core {
 		public void WriteFilter(string filter_string) {
 			var filter = new Filter(filter_string);
 			using (var db = new LiteDatabase(_settingsBase)) {
-				var col = db.GetCollection<Filter>("filters");
+				var col = db.GetCollection<Filter>(Tables.Filters);
 				var filters = new List<Filter>() { filter };
 
 				var existingFilter = col.Find(f => f.filter == filter_string).FirstOrDefault();
@@ -137,7 +159,7 @@ namespace NetSend.Core {
 
 		public List<string> GetAllFilters() {
 			using (var db = new LiteDatabase(_settingsBase)) {
-				var col = db.GetCollection<Filter>("filters");
+				var col = db.GetCollection<Filter>(Tables.Filters);
 				var result = new List<string>();
 				foreach (var filter in col.FindAll()) {
 					result.Add(filter.filter);
@@ -153,8 +175,8 @@ namespace NetSend.Core {
 		public void WriteRecipients(List<Recipient> recipients) {
 			if (recipients.Count == 0) return;
 
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Recipient>("recipients");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Recipient>(Tables.Recipients);
 				col.DeleteAll();
 				col.Insert(recipients);
 			}
@@ -163,8 +185,8 @@ namespace NetSend.Core {
 		public void WriteRecipient(Recipient recipient) {
 			if (recipient == null) return;
 
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Recipient>("recipients");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Recipient>(Tables.Recipients);
 				var founded = col.FindOne(r => r.Address == recipient.Address);
 				if (founded == null) col.Insert(recipient);
 				else {
@@ -180,8 +202,8 @@ namespace NetSend.Core {
 			var favourites = ReadAllFavourites();
 			var ignored = ReadAllIgnoredRecipients();
 
-			using (var db = new LiteDatabase(GetDatabase(Databases.CommonBase))) {
-				var col = db.GetCollection<Recipient>("recipients");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.CommonBase))) {
+				var col = db.GetCollection<Recipient>(Tables.Recipients);
 				var result = col.FindAll().ToList();
 
 				foreach (var recipient in result) {
@@ -209,8 +231,8 @@ namespace NetSend.Core {
 		#region Pseudonames
 
 		public void WritePseudoName(IPAddress address, string pseudoName) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
-				var col = db.GetCollection<Pseudoname>("pseudonames");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.PseudonamesBase))) {
+				var col = db.GetCollection<Pseudoname>(Tables.Pseudonames);
 				var foundedValue = col.FindOne(e => e.Address == address);
 				if (foundedValue != null) {
 					foundedValue.Name = pseudoName;
@@ -220,16 +242,16 @@ namespace NetSend.Core {
 		}
 
 		public string ReadPseudoName(IPAddress address) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
-				var col = db.GetCollection<Pseudoname>("pseudonames");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.PseudonamesBase))) {
+				var col = db.GetCollection<Pseudoname>(Tables.Pseudonames);
 				var foundedName = col.FindAll().FirstOrDefault(e => e.Address == address);
 				return foundedName?.Name ?? "";
 			}
 		}
 
 		public List<Pseudoname> ReadAllPseudoNames() {
-			using (var db = new LiteDatabase(GetDatabase(Databases.PseudonamesBase))) {
-				var col = db.GetCollection<Pseudoname>("pseudonames");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.PseudonamesBase))) {
+				var col = db.GetCollection<Pseudoname>(Tables.Pseudonames);
 				var result = col.FindAll().ToList();
 				return result;
 			}
@@ -240,43 +262,54 @@ namespace NetSend.Core {
 		#region Ignored
 
 		public void AddRecipientToIgnore(List<IgnoredRecipient> ignoredRecipients) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
-				var col = db.GetCollection<IgnoredRecipient>("ignored");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>(Tables.IgnoredRecipients);
 				col.Upsert(ignoredRecipients);
 			}
 		}
 
 		public void RemoveRecipientsFromIgnore(List<IgnoredRecipient> ignoredRecipients) {
 			if (ignoredRecipients == null) return;
-			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
-				var col = db.GetCollection<IgnoredRecipient>("ignored");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>(Tables.IgnoredRecipients);
 				var idsToRemove = ignoredRecipients.Select(e => e.Id).ToHashSet();
 				col.DeleteMany(e => idsToRemove.Contains(e.Id));
 			}
 		}
 
 		public void UpdateIgnoredRecipient(IgnoredRecipient recipient) {
-			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
-				var col = db.GetCollection<IgnoredRecipient>("ignored");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>(Tables.IgnoredRecipients);
 				col.Update(recipient);
 			}
 		}
 
 		public List<IgnoredRecipient> ReadAllIgnoredRecipients() {
-			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
-				var col = db.GetCollection<IgnoredRecipient>("ignored");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>(Tables.IgnoredRecipients);
 				var result = col.FindAll().ToList();
 				return result;
 			}
 		}
 
 		public void RemoveAllIgnoredRecipients() {
-			using (var db = new LiteDatabase(GetDatabase(Databases.IgnoredBase))) {
-				var col = db.GetCollection<IgnoredRecipient>("ignored");
+			using (var db = new LiteDatabase(GetDatabasePath(Databases.IgnoredBase))) {
+				var col = db.GetCollection<IgnoredRecipient>(Tables.IgnoredRecipients);
 				col.DeleteAll();
 			}
 		}
 
 		#endregion
+	}
+
+	static class Tables {
+		public static string Recipients { get; } = "recipients";
+		public static string IgnoredRecipients { get; } = "ignored";
+		public static string Settings { get; } = "settings";
+		public static string Schedules { get; } = "schedules";
+		public static string Messages { get; } = "messages";
+		public static string Favourites { get; } = "favourites";
+		public static string Pseudonames { get; } = "pseudonames";
+		public static string Filters { get; } = "filters";
 	}
 }

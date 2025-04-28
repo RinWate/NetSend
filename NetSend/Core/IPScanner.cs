@@ -48,7 +48,7 @@ namespace NetSend.Core {
 					}
 				}
 			});
-
+			if (token.IsCancellationRequested) return;
 			var result = temp_list.OrderBy(a => a.Hostname).Distinct(new AddressComparer()).ToList();
 			foreach (var temp in result) {
 				Global.Recipients.Add(temp);

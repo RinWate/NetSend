@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using NetSend.Core;
 using NetSend.Models;
 using NetSend.ViewModels;

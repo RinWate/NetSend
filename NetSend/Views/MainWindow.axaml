@@ -35,9 +35,6 @@
 				<Separator/>
 				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
 			</MenuItem>
-			<MenuItem Header="Шаблоны" IsEnabled="False">
-				
-			</MenuItem>
 		</Menu>
 		<Grid ColumnSpacing="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
 			  ColumnDefinitions="auto, auto, auto">
@@ -57,6 +54,7 @@
 					<MenuFlyout>
 						<MenuItem Header="Всем" Command="{Binding SendAllCommand}"/>
 						<MenuItem Header="По адресу..." Command="{Binding SendToAddressCommand}"/>
+						<MenuItem Header="Отложенная отправка..." Command="{Binding AddScheduleCommand}"/>
 					</MenuFlyout>
 				</SplitButton.Flyout>
 			</SplitButton>
