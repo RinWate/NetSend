@@ -1,35 +1,35 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:dialog="clr-namespace:NetSend.Dialogs;assembly=NetSend"
+             xmlns:dialog="clr-namespace:NetSend.Dialogs;assembly=NetSend"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450" Width="400" Height="450"
              x:Class="NetSend.AddScheduleDialog"
-			 x:DataType="dialog:AddScheduleDialogViewModel">
-	<Grid RowDefinitions="45, auto, *, auto" ShowGridLines="True" Margin="10" RowSpacing="5">
-		<StackPanel Grid.Row="1" Spacing="5">
-			<StackPanel>
-				<Label Content="Время отправки:"/>
-				<TimePicker/>
-			</StackPanel>
-			<StackPanel Spacing="5">
-				<Label Content="Режим отправки:"/>
-				<ComboBox SelectedValue="{Binding SendingMode}" HorizontalAlignment="Stretch">
-					<ComboBoxItem Content="Всем"/>
-					<ComboBoxItem Content="Выбранным"/>
-					<ComboBoxItem Content="По адресу"/>
-				</ComboBox>
-			</StackPanel>
-		</StackPanel>
-			<TextBox Grid.Row="2"
-					 Text="{Binding Message}" 
-					 VerticalAlignment="Stretch" 
-					 VerticalContentAlignment="Top"
-					 Watermark="Сообщение..."
-					 UseFloatingWatermark="True"/>
-		<StackPanel Orientation="Horizontal" Grid.Row="3" Spacing="10" HorizontalAlignment="Right">
-			<Button Classes="Success" Content="Создать" HotKey="Enter"/>
-			<Button Content="Отмена" HotKey="Escape" Command="{Binding CancelCommand}"/>
-		</StackPanel>
-	</Grid>
+             x:DataType="dialog:AddScheduleDialogViewModel">
+    <Grid RowDefinitions="45, auto, *, auto" ShowGridLines="True" Margin="10" RowSpacing="5">
+        <StackPanel Grid.Row="1" Spacing="5">
+            <StackPanel>
+                <Label Content="Время отправки:" />
+                <TimePicker />
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <Label Content="Режим отправки:" />
+                <ComboBox SelectedValue="{Binding SendingMode}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="Всем" />
+                    <ComboBoxItem Content="Выбранным" />
+                    <ComboBoxItem Content="По адресу" />
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        <TextBox Grid.Row="2"
+                 Text="{Binding Message}"
+                 VerticalAlignment="Stretch"
+                 VerticalContentAlignment="Top"
+                 Watermark="Сообщение..."
+                 UseFloatingWatermark="True" />
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Spacing="10" HorizontalAlignment="Right">
+            <Button Classes="Success" Content="Создать" HotKey="Enter" />
+            <Button Content="Отмена" HotKey="Escape" Command="{Binding CancelCommand}" />
+        </StackPanel>
+    </Grid>
 </UserControl>

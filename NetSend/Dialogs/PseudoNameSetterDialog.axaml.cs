@@ -4,12 +4,12 @@ using Avalonia.Interactivity;
 namespace NetSend;
 
 public partial class PseudoNameSetterDialog : UserControl {
-	public PseudoNameSetterDialog() {
-		InitializeComponent();
-	}
+    public PseudoNameSetterDialog() {
+        InitializeComponent();
+    }
 
-	protected override void OnLoaded(RoutedEventArgs e) {
-		tb_pseudoname.Focus();
-		base.OnLoaded(e);
-	}
+    protected override void OnLoaded(RoutedEventArgs e) {
+        tb_pseudoname.Focus();
+        base.OnLoaded(e);
+    }
 }

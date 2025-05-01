@@ -1,30 +1,29 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.Core.Enums;
 using NetSend.ViewModels;
-using System;
 
-namespace NetSend.Dialogs {
-	public partial class AddScheduleDialogViewModel : ViewModelBase, IDialogContext {
-		public event EventHandler<object?>? RequestClose;
+namespace NetSend.Dialogs;
 
-		[ObservableProperty] private DateTime _sendTime;
-		[ObservableProperty] private SendingMode _sendingMode;
-		[ObservableProperty] private string _message = string.Empty;
+public partial class AddScheduleDialogViewModel : ViewModelBase, IDialogContext {
+    [ObservableProperty] private string _message = string.Empty;
+    [ObservableProperty] private SendingMode _sendingMode;
 
-		[RelayCommand]
-		private void Create() {
+    [ObservableProperty] private DateTime _sendTime;
+    public event EventHandler<object?>? RequestClose;
 
-		}
+    public void Close() {
+        RequestClose?.Invoke(this, false);
+    }
 
-		[RelayCommand]
-		public void Cancel() {
-			RequestClose?.Invoke(this, false);
-		}
+    [RelayCommand]
+    private void Create() {
+    }
 
-		public void Close() {
-			RequestClose?.Invoke(this, false);
-		}
-	}
+    [RelayCommand]
+    public void Cancel() {
+        RequestClose?.Invoke(this, false);
+    }
 }

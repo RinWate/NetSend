@@ -1,43 +1,41 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using NetSend.Core;
 using NetSend.Views;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace NetSend {
-	public partial class App : Application {
-		public override void Initialize() {
-			AvaloniaXamlLoader.Load(this);
-		}
+namespace NetSend;
 
-		public override void OnFrameworkInitializationCompleted() {
-			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-				Settings.RegisterAdditionalMappings();
-				Settings.LoadSettings();
+public class App : Application {
+    public override void Initialize() {
+        AvaloniaXamlLoader.Load(this);
+    }
 
-				Settings.LoadIgnoredRecipients();
-				Settings.ReloadRecipients();
+    public override void OnFrameworkInitializationCompleted() {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+            Settings.RegisterAdditionalMappings();
+            Settings.LoadSettings();
 
-				DisableAvaloniaDataAnnotationValidation();
-				desktop.MainWindow = new MainWindow();
-			}
+            Settings.LoadIgnoredRecipients();
+            Settings.ReloadRecipients();
 
-			base.OnFrameworkInitializationCompleted();
-		}
+            DisableAvaloniaDataAnnotationValidation();
+            desktop.MainWindow = new MainWindow();
+        }
 
-		[RequiresUnreferencedCode("Calls Avalonia.Data.Core.Plugins.BindingPlugins.DataValidators")]
-		private void DisableAvaloniaDataAnnotationValidation() {
-			// Get an array of plugins to remove
-			var dataValidationPluginsToRemove =
-				BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+        base.OnFrameworkInitializationCompleted();
+    }
 
-			// remove each entry found
-			foreach (var plugin in dataValidationPluginsToRemove) {
-				BindingPlugins.DataValidators.Remove(plugin);
-			}
-		}
-	}
+    [RequiresUnreferencedCode("Calls Avalonia.Data.Core.Plugins.BindingPlugins.DataValidators")]
+    private void DisableAvaloniaDataAnnotationValidation() {
+        // Get an array of plugins to remove
+        var dataValidationPluginsToRemove =
+            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+
+        // remove each entry found
+        foreach (var plugin in dataValidationPluginsToRemove) BindingPlugins.DataValidators.Remove(plugin);
+    }
 }

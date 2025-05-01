@@ -1,24 +1,19 @@
-﻿using NetSend.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NetSend.Models;
 
-namespace NetSend.Core {
-	public static class MessageScheduler {
+namespace NetSend.Core;
 
-		public static void AddMessageToSchedule() {
+public static class MessageScheduler {
+    public static void AddMessageToSchedule() {
+    }
 
-		}
+    public static void RemoveMessageFromSchedule() {
+    }
 
-		public static void RemoveMessageFromSchedule() {
+    public static List<Message> GetScheduledMessage() {
+        return new List<Message>();
+    }
 
-		}
-
-		public static List<Message> GetScheduledMessage() {
-			return new List<Message>();
-		}
-
-		public static void SendBySchedule() {
-
-		}
-
-	}
+    public static void SendBySchedule() {
+    }
 }

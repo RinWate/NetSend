@@ -1,41 +1,41 @@
-﻿using LiteDB;
-using System.Net;
+﻿using System.Net;
+using LiteDB;
 
-namespace NetSend.Models {
-	public class Recipient : Model {
+namespace NetSend.Models;
 
-		[BsonIgnore]
-		public bool IsIgnored { get; set; }
-		[BsonIgnore]
-		public bool IsFavourite { get; set; }
-		[BsonIgnore]
-		public string PseudoName { get; set; } = string.Empty;
-		public string Hostname { get; set; } = string.Empty;
-		public IPAddress Address { get; set; } = IPAddress.None;
+public class Recipient : Model {
+    public Recipient(string hostname, IPAddress address) {
+        Hostname = hostname;
+        Address = address;
+    }
 
-		public Recipient(string hostname, IPAddress address) {
-			Hostname = hostname;
-			Address = address;
-		}
+    public Recipient(string pseudoname, string hostname, IPAddress address) {
+        PseudoName = pseudoname;
+        Hostname = hostname;
+        Address = address;
+    }
 
-		public Recipient(string pseudoname, string hostname, IPAddress address) {
-			PseudoName = pseudoname;
-			Hostname = hostname;
-			Address = address;
-		}
+    public Recipient(bool isFavourite, string pseudoname, string hostname, IPAddress address) {
+        IsFavourite = isFavourite;
+        PseudoName = pseudoname;
+        Hostname = hostname;
+        Address = address;
+    }
 
-		public Recipient(bool isFavourite, string pseudoname, string hostname, IPAddress address) {
-			IsFavourite = isFavourite;
-			PseudoName = pseudoname;
-			Hostname = hostname;
-			Address = address;
-		}
+    public Recipient() {
+    }
 
-		public Recipient() { }
+    [BsonIgnore] public bool IsIgnored { get; set; }
 
-		public override string? ToString() {
-			if (string.IsNullOrWhiteSpace(PseudoName)) return $"{Hostname} : {Address}";
-			return $"{PseudoName} : {Address}";
-		}
-	}
+    [BsonIgnore] public bool IsFavourite { get; set; }
+
+    [BsonIgnore] public string PseudoName { get; set; } = string.Empty;
+
+    public string Hostname { get; set; } = string.Empty;
+    public IPAddress Address { get; set; } = IPAddress.None;
+
+    public override string? ToString() {
+        if (string.IsNullOrWhiteSpace(PseudoName)) return $"{Hostname} : {Address}";
+        return $"{PseudoName} : {Address}";
+    }
 }

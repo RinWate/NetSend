@@ -1,76 +1,73 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using NetSend.Core;
-using NetSend.Core.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using NetSend.Core;
+using NetSend.Core.Enums;
 
-namespace NetSend.ViewModels {
-	public partial class ScanWindowViewModel : ViewModelBase {
+namespace NetSend.ViewModels;
 
-		[ObservableProperty]
-		private string _log = string.Empty;
-		[ObservableProperty]
-		private bool _isScanning = false;
-		[ObservableProperty]
-		private List<string> _filters;
-		[ObservableProperty]
-		private string _filter = string.Empty;
+public partial class ScanWindowViewModel : ViewModelBase {
+    private CancellationTokenSource? _cts;
 
-		private CancellationTokenSource? _cts;
+    [ObservableProperty] private string _filter = string.Empty;
 
-		public ScanWindowViewModel(Window? parent = null) {
-			var db = new Database();
-			Filters = db.GetAllFilters();
+    [ObservableProperty] private List<string> _filters;
 
-			Settings.GetValue("DefaultFilter", out string value);
-			Filter = value;
+    [ObservableProperty] private bool _isScanning;
 
-			if (parent != null) window = parent;
+    [ObservableProperty] private string _log = string.Empty;
 
-			ScanCommand.ExecuteAsync(Filter);
-		}
+    public ScanWindowViewModel(Window? parent = null) {
+        var db = new Database();
+        Filters = db.GetAllFilters();
 
-		[RelayCommand]
-		private async Task Scan(string ipAddress) {
-			_cts = new CancellationTokenSource();
-			var token = _cts.Token;
-			if (string.IsNullOrWhiteSpace(ipAddress)) {
-				Log += "Не введен фильтр!" + Environment.NewLine;
-				return;
-			}
+        Settings.GetValue("DefaultFilter", out var value);
+        Filter = value;
 
-			try {
-				IPAddress.Parse(ipAddress);
-			} catch {
-				Log += "Некорректный формат фильтра!" + Environment.NewLine;
-				return;
-			}
+        if (parent != null) window = parent;
 
-			IsScanning = true;
-			var scanner = new IPScanner();
+        ScanCommand.ExecuteAsync(Filter);
+    }
 
-			Log += "Сканирование начато..." + Environment.NewLine;
-			await Task.Run(() => {
-				scanner.Scan(ipAddress, (message) => {
-					if (token.IsCancellationRequested) return;
-					Avalonia.Threading.Dispatcher.UIThread.Post(() => {
-						Log += message + Environment.NewLine;
-					});
-				}, token);
-			}, token);
-			IsScanning = false;
+    [RelayCommand]
+    private async Task Scan(string ipAddress) {
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+        if (string.IsNullOrWhiteSpace(ipAddress)) {
+            Log += "Не введен фильтр!" + Environment.NewLine;
+            return;
+        }
 
-			new Database().WriteFilter(ipAddress);
-			window?.Close(ScanResult.Success);
-		}
+        try {
+            IPAddress.Parse(ipAddress);
+        } catch {
+            Log += "Некорректный формат фильтра!" + Environment.NewLine;
+            return;
+        }
 
-		public void CancelScan() {
-			_cts?.Cancel();
-		}
-	}
+        IsScanning = true;
+        var scanner = new IPScanner();
+
+        Log += "Сканирование начато..." + Environment.NewLine;
+        await Task.Run(() => {
+            scanner.Scan(ipAddress, message => {
+                if (token.IsCancellationRequested) return;
+                Dispatcher.UIThread.Post(() => { Log += message + Environment.NewLine; });
+            }, token);
+        }, token);
+        IsScanning = false;
+
+        new Database().WriteFilter(ipAddress);
+        window?.Close(ScanResult.Success);
+    }
+
+    public void CancelScan() {
+        _cts?.Cancel();
+    }
 }

@@ -1,7 +1,5 @@
-﻿namespace NetSend.Models {
-	public class Model {
+﻿namespace NetSend.Models;
 
-		public int Id { get; set; }
-
-	}
+public class Model {
+    public int Id { get; set; }
 }

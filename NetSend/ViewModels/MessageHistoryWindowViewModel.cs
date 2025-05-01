@@ -1,58 +1,55 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Models;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
-namespace NetSend.ViewModels {
-	public partial class MessageHistoryWindowViewModel : ViewModelBase {
+namespace NetSend.ViewModels;
 
-		[ObservableProperty]
-		private ObservableCollection<Message> _messages;
-		[ObservableProperty]
-		private Message _selectedMessage = new Message();
+public partial class MessageHistoryWindowViewModel : ViewModelBase {
+    private readonly MainWindowViewModel? _mainViewModel;
 
-		private MainWindowViewModel? _mainViewModel;
+    [ObservableProperty] private ObservableCollection<Message> _messages;
 
-		public MessageHistoryWindowViewModel() {
-			var db = new Database();
-			Messages = new ObservableCollection<Message>(db.AllMessages());
-		}
+    [ObservableProperty] private Message _selectedMessage = new();
 
-		public MessageHistoryWindowViewModel(MainWindowViewModel mainViewModel) {
-			var db = new Database();
-			Messages = new ObservableCollection<Message>(db.AllMessages());
-			_mainViewModel = mainViewModel;
-		}
+    public MessageHistoryWindowViewModel() {
+        var db = new Database();
+        Messages = new ObservableCollection<Message>(db.AllMessages());
+    }
 
-		[RelayCommand]
-		public void ClearHistory() {
-			Messages.Clear();
-			var db = new Database();
-			db.ClearMessages();
-		}
+    public MessageHistoryWindowViewModel(MainWindowViewModel mainViewModel) {
+        var db = new Database();
+        Messages = new ObservableCollection<Message>(db.AllMessages());
+        _mainViewModel = mainViewModel;
+    }
 
-		[RelayCommand]
-		public async Task CopyMessage() {
-			var mainWindow = Global.GetMainWindow();
-			var clipboard = mainWindow!.Clipboard;
+    [RelayCommand]
+    public void ClearHistory() {
+        Messages.Clear();
+        var db = new Database();
+        db.ClearMessages();
+    }
 
-			await clipboard!.SetTextAsync(SelectedMessage.Content);
-		}
+    [RelayCommand]
+    public async Task CopyMessage() {
+        var mainWindow = Global.GetMainWindow();
+        var clipboard = mainWindow!.Clipboard;
 
-		[RelayCommand]
-		public void CopyMessageToMainWindow() {
-			if (_mainViewModel != null)
-				_mainViewModel.Message = SelectedMessage.Content;
-		}
+        await clipboard!.SetTextAsync(SelectedMessage.Content);
+    }
 
-		[RelayCommand]
-		public void DeleteMessage() {
-			var db = new Database();
-			db.DeleteMessage(SelectedMessage.Id);
-			Messages.Remove(SelectedMessage);
-		}
+    [RelayCommand]
+    public void CopyMessageToMainWindow() {
+        if (_mainViewModel != null)
+            _mainViewModel.Message = SelectedMessage.Content;
+    }
 
-	}
+    [RelayCommand]
+    public void DeleteMessage() {
+        var db = new Database();
+        db.DeleteMessage(SelectedMessage.Id);
+        Messages.Remove(SelectedMessage);
+    }
 }

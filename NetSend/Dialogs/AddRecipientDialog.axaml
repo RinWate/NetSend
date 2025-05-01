@@ -9,29 +9,29 @@
     <Grid RowDefinitions="50, *, Auto" Margin="10">
         <StackPanel Grid.Row="1" Spacing="10">
             <StackPanel Spacing="5">
-                <Label Content="Псевдоним:"></Label>
-                <TextBox Name="tb_pseudoname" Text="{Binding Pseudoname}" Watermark="Необязательно..."></TextBox>
+                <Label Content="Псевдоним:" />
+                <TextBox Name="tb_pseudoname" Text="{Binding Pseudoname}" Watermark="Необязательно..." />
             </StackPanel>
             <StackPanel Spacing="5">
-                <Label Content="Доменное имя:"></Label>
-                <TextBox Text="{Binding DomainName}"></TextBox>
+                <Label Content="Доменное имя:" />
+                <TextBox Text="{Binding DomainName}" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <Label Content="Адрес:"></Label>
-                <TextBox Text="{Binding Address}"></TextBox>
+                <Label Content="Адрес:" />
+                <TextBox Text="{Binding Address}" />
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="2"
                     Spacing="10"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
-            <Button Classes="Success" 
+            <Button Classes="Success"
                     Content="Добавить"
                     HotKey="Enter"
-                    Command="{Binding AddCommand}"></Button>
+                    Command="{Binding AddCommand}" />
             <Button Content="Отмена"
                     HotKey="Escape"
-                    Command="{Binding CancelCommand}"></Button>
+                    Command="{Binding CancelCommand}" />
         </StackPanel>
     </Grid>
 </UserControl>

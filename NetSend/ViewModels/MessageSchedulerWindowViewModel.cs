@@ -1,4 +1,4 @@
-﻿namespace NetSend.ViewModels {
-	public partial class MessageSchedulerWindowViewModel : ViewModelBase {
-	}
+﻿namespace NetSend.ViewModels;
+
+public class MessageSchedulerWindowViewModel : ViewModelBase {
 }
