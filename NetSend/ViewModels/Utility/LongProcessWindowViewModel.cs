@@ -3,9 +3,9 @@
 namespace NetSend.ViewModels;
 
 public partial class LongProcessWindowViewModel : ViewModelBase {
-    [ObservableProperty] private string title = string.Empty;
+	[ObservableProperty] private string title = string.Empty;
 
-    public LongProcessWindowViewModel(string title) {
-        this.title = title;
-    }
+	public LongProcessWindowViewModel(string title) {
+		this.title = title;
+	}
 }

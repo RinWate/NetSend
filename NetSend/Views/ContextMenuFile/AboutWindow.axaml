@@ -30,7 +30,7 @@
             <StackPanel Grid.Row="1">
                 <TextBlock>
                     Используемые библиотеки:<LineBreak />
-                    <Run Text="- Avalonia UI v.11.3.0-rc1" FontWeight="DemiBold" /> <LineBreak />
+                    <Run Text="- Avalonia UI v.11.3.0" FontWeight="DemiBold" /> <LineBreak />
                     <Run Text="- Irihi.Ursa 1.11.0" FontWeight="DemiBold" /> <LineBreak />
                     <Run Text="- LiteDB v. 5.0.21" FontWeight="DemiBold" /> <LineBreak />
                     <Run Text="- CommunityToolkit.MVVM v. 8.4.0" FontWeight="DemiBold" />

@@ -1,37 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using Avalonia.Controls;
+using NetSend.Models;
+using NetSend.ViewModels;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
-using NetSend.Models;
-using NetSend.ViewModels;
 
 namespace NetSend.Core;
 
 public class Sender {
-    public async Task Send(string message, Window parent, List<Recipient>? recipients = null) {
-        var tasks = new List<Task>();
-        var long_operation = new LongProcessWindow();
-        long_operation.DataContext = new LongProcessWindowViewModel("Отправка...");
-        _ = long_operation.ShowDialog(parent);
 
-        var target_recipients = recipients ?? Global.Recipients.ToList();
+	/// <summary>
+	/// Отправить заданным получателям сообщение
+	/// </summary>
+	/// <param name="message">Сообщение для отправки</param>
+	/// <param name="parent">Родительское окно</param>
+	/// <param name="recipients">Список получателей</param>
+	/// <returns>Task</returns>
+	public async Task Send(string message, Window parent, List<Recipient>? recipients = null) {
+		var tasks = new List<Task>();
+		var long_operation = new LongProcessWindow();
+		long_operation.DataContext = new LongProcessWindowViewModel("Отправка...");
+		_ = long_operation.ShowDialog(parent);
 
-        foreach (var recipient in target_recipients) {
-            var addr = recipient.Address;
+		var target_recipients = recipients ?? Global.Recipients.ToList();
 
-            var info = new ProcessStartInfo();
-            info.WorkingDirectory = "C:/Windows/System32/";
-            info.CreateNoWindow = true;
-            info.FileName = "msg.exe";
-            info.Arguments = $"* /SERVER:{addr} {message}";
+		foreach (var recipient in target_recipients) {
+			var addr = recipient.Address;
 
-            tasks.Add(Process.Start(info)!.WaitForExitAsync());
-        }
+			var info = new ProcessStartInfo();
+			info.WorkingDirectory = "C:/Windows/System32/";
+			info.CreateNoWindow = true;
+			info.FileName = "msg.exe";
+			info.Arguments = $"* /SERVER:{addr} {message}";
 
-        await Task.WhenAll(tasks);
+			tasks.Add(Process.Start(info)!.WaitForExitAsync());
+		}
 
-        long_operation.Close();
-        new Database().WriteMessage(message);
-    }
+		await Task.WhenAll(tasks);
+
+		long_operation.Close();
+		new Database().WriteMessage(message);
+	}
 }

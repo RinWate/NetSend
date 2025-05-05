@@ -10,6 +10,8 @@
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
+	
+	
 
     <Application.Styles>
         <StyleInclude Source="avares://Semi.Avalonia.DataGrid/Index.axaml" />

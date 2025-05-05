@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450" Width="400" Height="450"
              x:Class="NetSend.AddScheduleDialog"
              x:DataType="dialog:AddScheduleDialogViewModel">
-    <Grid RowDefinitions="45, auto, *, auto" ShowGridLines="True" Margin="10" RowSpacing="5">
+    <Grid RowDefinitions="45, auto, *, auto" Margin="10" RowSpacing="5">
         <StackPanel Grid.Row="1" Spacing="5">
             <StackPanel>
                 <Label Content="Время отправки:" />
@@ -17,7 +17,6 @@
                 <ComboBox SelectedValue="{Binding SendingMode}" HorizontalAlignment="Stretch">
                     <ComboBoxItem Content="Всем" />
                     <ComboBoxItem Content="Выбранным" />
-                    <ComboBoxItem Content="По адресу" />
                 </ComboBox>
             </StackPanel>
         </StackPanel>
