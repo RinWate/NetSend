@@ -33,7 +33,7 @@ namespace NetSend.Core {
 				info.WorkingDirectory = "C:/Windows/System32/";
 				info.CreateNoWindow = true;
 				info.FileName = "msg.exe";
-				info.Arguments = $"* /SERVER:{addr} {message}";
+				info.Arguments = $"* /SERVER:{addr} /TIME:999 {message}";
 
 				tasks.Add(Process.Start(info)!.WaitForExitAsync());
 			}
