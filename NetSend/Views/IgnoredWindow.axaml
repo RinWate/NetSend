@@ -4,37 +4,37 @@
         xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
-		Width="500" Height="600"
-		WindowStartupLocation="CenterOwner"
+        Width="500" Height="600"
+        WindowStartupLocation="CenterOwner"
         x:Class="NetSend.Views.IgnoredWindow"
         x:DataType="vm:IgnoredWindowViewModel"
         Title="Список игнорируемых получателей">
-        <Grid Margin="5" RowDefinitions="Auto, *" RowSpacing="5">
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <Button Content="Очистить" Command="{Binding ClearIgnoredRecipientsCommand}"/>
-                </StackPanel>
-                <DataGrid Grid.Row="1"
-						  SelectionMode="Extended"
-                          ItemsSource="{Binding IgnoredRecipients}"
-						  CellEditEnded="DataGrid_OnCellEditEnded"
-						  SelectionChanged="DataGrid_SelectionChanged">
-                        <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Width="Auto" Binding="{Binding Id}" IsReadOnly="True"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Доменное имя" Width="Auto" Binding="{Binding DomainName}" IsReadOnly="True"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Адрес" Width="Auto" Binding="{Binding Address}" IsReadOnly="True"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Комментарий" Width="*" Binding="{Binding Comment}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-					<DataGrid.Styles>
-						<Style Selector="TextBlock">
-							<Setter Property="TextWrapping" Value="Wrap"/>
-							<Setter Property="FontSize" Value="12"/>
-						</Style>
-					</DataGrid.Styles>
-					<DataGrid.ContextMenu>
-						<ContextMenu>
-							<MenuItem Header="Не игнорировать" Command="{Binding RemoveFromIgnoreCommand}"/>
-						</ContextMenu>
-					</DataGrid.ContextMenu>
-                </DataGrid>
-        </Grid>
+    <Grid Margin="5" RowDefinitions="Auto, *" RowSpacing="5">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="Очистить" Command="{Binding ClearIgnoredRecipientsCommand}" />
+        </StackPanel>
+        <DataGrid Grid.Row="1"
+                  SelectionMode="Extended"
+                  ItemsSource="{Binding IgnoredRecipients}"
+                  CellEditEnded="DataGrid_OnCellEditEnded"
+                  SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Width="Auto" Binding="{Binding Id}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Доменное имя" Width="Auto" Binding="{Binding DomainName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Адрес" Width="Auto" Binding="{Binding Address}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Комментарий" Width="*" Binding="{Binding Comment}" />
+            </DataGrid.Columns>
+            <DataGrid.Styles>
+                <Style Selector="TextBlock">
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+            </DataGrid.Styles>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Не игнорировать" Command="{Binding RemoveFromIgnoreCommand}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
 </Window>

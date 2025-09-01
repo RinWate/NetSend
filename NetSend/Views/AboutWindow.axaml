@@ -2,27 +2,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300" 
-		Width="500" Height="300"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+        Width="500" Height="300"
         x:Class="NetSend.AboutWindow"
-		x:DataType="vm:AboutWindowViewModel"
+        x:DataType="vm:AboutWindowViewModel"
         Title="AboutWindow">
 
-	<Grid ColumnDefinitions="100, *"
-		  RowDefinitions="*, auto"
-		  ColumnSpacing="5"
-		  RowSpacing="5"
-		  ShowGridLines="True"
-		  Margin="5">
+    <Grid ColumnDefinitions="100, *"
+          RowDefinitions="*, auto"
+          ColumnSpacing="5"
+          RowSpacing="5"
+          ShowGridLines="True"
+          Margin="5">
 
-		<StackPanel Grid.Column="0" 
-					Grid.Row="1"
-					Grid.ColumnSpan="2"
-					HorizontalAlignment="Center">
-			<Button Content="Закрыть" Command="{Binding CloseWindowCommand}"/>
-		</StackPanel>
-		
-	</Grid>
-	
+        <StackPanel Grid.Column="0"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Center">
+            <Button Content="Закрыть" Command="{Binding CloseWindowCommand}" />
+        </StackPanel>
+
+    </Grid>
+
 </Window>

@@ -1,116 +1,114 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:NetSend.ViewModels"
-		xmlns:local="clr-namespace:NetSend;assembly=NetSend"
-		xmlns:models="clr-namespace:NetSend.Models;assembly=NetSend"
-		xmlns:converters="clr-namespace:NetSend.Converters;assembly=NetSend"
-		xmlns:ursa="https://irihi.tech/ursa"
+        xmlns:local="clr-namespace:NetSend;assembly=NetSend"
+        xmlns:models="clr-namespace:NetSend.Models;assembly=NetSend"
+        xmlns:converters="clr-namespace:NetSend.Converters;assembly=NetSend"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450" Width="600" Height="500"
         x:Class="NetSend.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-		MinWidth="580"
-		MinHeight="250"
-		WindowStartupLocation="CenterScreen"
+        MinWidth="580"
+        MinHeight="250"
+        WindowStartupLocation="CenterScreen"
         Title="NetSend via Windows Message">
-	
+
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
-	<Window.Resources>
-		<converters:BoolToFontWeightConverter x:Key="FavouriteConverter"/>
-	</Window.Resources>
+    <Window.Resources>
+        <converters:BoolToFontWeightConverter x:Key="FavouriteConverter" />
+    </Window.Resources>
 
-	<Grid Margin="5" ColumnSpacing="5" RowSpacing="5" ColumnDefinitions="*,*" RowDefinitions="auto,auto,*,auto">
-		<Menu FontSize="13">
-			<MenuItem Header="Файл">
-				<MenuItem Header="История сообщений" Command="{Binding OpenHistoryCommand}"></MenuItem>
-				<MenuItem Header="Черный список" Command="{Binding OpenIgnoredListCommand}"/>
-				<Separator/>
-				<MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}"></MenuItem>
-				<MenuItem Header="О программе" Command="{Binding OpenAboutCommand}" IsEnabled="False"></MenuItem>
-				<Separator/>
-				<MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
-			</MenuItem>
-			<MenuItem Header="Шаблоны" IsEnabled="False">
-				
-			</MenuItem>
-		</Menu>
-		<Grid ColumnSpacing="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
-			  ColumnDefinitions="auto, auto, auto">
-			<Button Grid.Column="0"
-					Grid.Row="0"
-					Content="Сканировать"
-					Command="{Binding ScanCommand}"/>
-			<SplitButton Grid.Column="1" Grid.Row="0" Content="Отправить выбранным" Command="{Binding SendCommand}">
-				<SplitButton.Flyout>
-					<MenuFlyout>
-						<MenuItem Header="Всем" Command="{Binding SendAllCommand}"/>
-						<MenuItem Header="По адресу..." Command="{Binding SendToAddressCommand}"/>
-					</MenuFlyout>
-				</SplitButton.Flyout>
-			</SplitButton>
-			<Button Grid.Column="2"
-					Content="История"
-					Command="{Binding OpenHistoryCommand}">
-			</Button>
-		</Grid>
-		<TextBox Grid.Column="1"
-				 Grid.Row="2"
-				 VerticalAlignment="Stretch"
-				 VerticalContentAlignment="Stretch"
-				 TextAlignment="Start"
-				 TextWrapping="Wrap"
-				 AcceptsReturn="True"
-				 Watermark="Сообщение... (максимум 255 символов)"
-				 Text="{Binding Message}"
-				 MaxLength="255"/>
-		<Grid Grid.Column="0"
-			  Grid.Row="2"
-			  RowDefinitions="*, auto">
-			<ListBox Grid.Row="0"
-					 FontSize="12"
-					 SelectionMode="Multiple"
-					 VerticalAlignment="Stretch"
-					 HorizontalAlignment="Stretch"
-					 SelectedItems="{Binding SelectedRecipients}"
-					 ItemsSource="{Binding FilteredItems}">
-				<ListBox.ContextMenu>
-					<ContextMenu>
-						<MenuItem Header="Установить псевдоним..."
-								  Command="{Binding SetPseudoNameCommand}"
-								  ToolTip.Tip="Псевдоним будет отображаться вместо доменного имени"/>
-						<MenuItem Header="Сбросить псевдоним..."
-								  Command="{Binding ClearPseudoNameCommand}"/>
-						<Separator/>
-						<MenuItem Header="Добавить в избранное"
-								  Command="{Binding AddInFavouriteCommand}"
-								  IsVisible="{Binding !SelectedRecipients[0].IsFavourite, Mode=TwoWay}"/>
-						<MenuItem Header="Удалить из избранного"
-								  Command="{Binding RemoveInFavouriteCommand}"
-								  IsVisible="{Binding SelectedRecipients[0].IsFavourite, Mode=TwoWay}"/>
-						<Separator/>
-						<MenuItem Header="Игнорировать" Command="{Binding AddRecipientToIgnoreListCommand}" ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться"/>
-					</ContextMenu>
-				</ListBox.ContextMenu>
-				<ListBox.ItemTemplate>
-					<DataTemplate DataType="models:Recipient">
-						<StackPanel Orientation="Horizontal" Spacing="5">
-							<Image Source="/Assets/favouriteIcon.png" Width="16" IsVisible="{Binding IsFavourite}"/>
-							<TextBlock Text="{Binding}" FontWeight="{Binding IsFavourite, Converter={StaticResource ResourceKey=FavouriteConverter}}"/>
-						</StackPanel>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
-			<TextBox Name="Filter" Classes="clearButton" Grid.Row="1" Watermark="Поиск..." Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-		</Grid>
+    <Grid Margin="5" ColumnSpacing="5" RowSpacing="5" ColumnDefinitions="*,*" RowDefinitions="auto,auto,*,auto">
+        <Menu FontSize="13">
+            <MenuItem Header="Файл">
+                <MenuItem Header="История сообщений" Command="{Binding OpenHistoryCommand}" />
+                <MenuItem Header="Черный список" Command="{Binding OpenIgnoredListCommand}" />
+                <Separator />
+                <MenuItem Header="Настройки" Command="{Binding OpenSettingsCommand}" />
+                <MenuItem Header="О программе" Command="{Binding OpenAboutCommand}" IsEnabled="False" />
+                <Separator />
+                <MenuItem Header="Выход" Command="{Binding ExitCommand}" />
+            </MenuItem>
+        </Menu>
+        <Grid ColumnSpacing="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+              ColumnDefinitions="auto, auto, auto">
+            <Button Grid.Column="0"
+                    Grid.Row="0"
+                    Content="Сканировать"
+                    Command="{Binding ScanCommand}" />
+            <SplitButton Grid.Column="1" Grid.Row="0" Content="Отправить выбранным" Command="{Binding SendCommand}">
+                <SplitButton.Flyout>
+                    <MenuFlyout>
+                        <MenuItem Header="Всем" Command="{Binding SendAllCommand}" />
+                        <MenuItem Header="По адресу..." Command="{Binding SendToAddressCommand}" />
+                    </MenuFlyout>
+                </SplitButton.Flyout>
+            </SplitButton>
+            <Button Grid.Column="2"
+                    Content="История"
+                    Command="{Binding OpenHistoryCommand}" />
+        </Grid>
+        <TextBox Grid.Column="1"
+                 Grid.Row="2"
+                 VerticalAlignment="Stretch"
+                 VerticalContentAlignment="Stretch"
+                 TextAlignment="Start"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 Watermark="Сообщение... (максимум 255 символов)"
+                 Text="{Binding Message}"
+                 MaxLength="255" />
+        <Grid Grid.Column="0"
+              Grid.Row="2"
+              RowDefinitions="*, auto">
+            <ListBox Grid.Row="0"
+                     FontSize="12"
+                     SelectionMode="Multiple"
+                     VerticalAlignment="Stretch"
+                     HorizontalAlignment="Stretch"
+                     SelectedItems="{Binding SelectedRecipients}"
+                     ItemsSource="{Binding FilteredItems}">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Установить псевдоним..."
+                                  Command="{Binding SetPseudoNameCommand}"
+                                  ToolTip.Tip="Псевдоним будет отображаться вместо доменного имени" />
+                        <MenuItem Header="Сбросить псевдоним..."
+                                  Command="{Binding ClearPseudoNameCommand}" />
+                        <Separator />
+                        <MenuItem Header="Добавить в избранное"
+                                  Command="{Binding AddInFavouriteCommand}"
+                                  IsVisible="{Binding !SelectedRecipients[0].IsFavourite, Mode=TwoWay}" />
+                        <MenuItem Header="Удалить из избранного"
+                                  Command="{Binding RemoveInFavouriteCommand}"
+                                  IsVisible="{Binding SelectedRecipients[0].IsFavourite, Mode=TwoWay}" />
+                        <Separator />
+                        <MenuItem Header="Игнорировать" Command="{Binding AddRecipientToIgnoreListCommand}"
+                                  ToolTip.Tip="При следующем сканировании данный получатель будет игнорироваться" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="models:Recipient">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Image Source="/Assets/favouriteIcon.png" Width="16" IsVisible="{Binding IsFavourite}" />
+                            <TextBlock Text="{Binding}"
+                                       FontWeight="{Binding IsFavourite, Converter={StaticResource ResourceKey=FavouriteConverter}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox Name="Filter" Classes="clearButton" Grid.Row="1" Watermark="Поиск..."
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
 
-		<Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}"></Label>
-		<Label Grid.Column="1" Grid.Row="3" Content="{Binding Source={x:Static local:Global.StatusString}}"/>
+        <Label Grid.Column="0" Grid.Row="3" Content="{Binding Source={x:Static local:Global.VERSION}}" />
+        <Label Grid.Column="1" Grid.Row="3" Content="{Binding Source={x:Static local:Global.StatusString}}" />
 
-	</Grid>
-	
+    </Grid>
+
 </Window>

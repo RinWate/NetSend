@@ -1,4 +1,3 @@
-﻿
-namespace NetSend.Models {
-	public record Filter(string filter);
-}
+﻿namespace NetSend.Models;
+
+public record Filter(string filter);

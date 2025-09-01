@@ -1,32 +1,31 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Net;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.Core;
-using System;
-using System.Net;
 
-namespace NetSend.Dialogs {
-	public partial class PseudoNameSetterDialogViewModel : ObservableObject, IDialogContext {
+namespace NetSend.Dialogs;
 
-		public event EventHandler<object?>? RequestClose;
-		private IPAddress _address;
+public partial class PseudoNameSetterDialogViewModel : ObservableObject, IDialogContext {
+    private readonly IPAddress _address;
 
-		public PseudoNameSetterDialogViewModel(IPAddress address) {
-			_address = address;
-		}
+    [ObservableProperty]
+    private string _pseudoname = string.Empty;
 
-		[ObservableProperty]
-		private string _pseudoname = string.Empty;
+    public PseudoNameSetterDialogViewModel(IPAddress address) {
+        _address = address;
+    }
 
-		public void Close() {
-			RequestClose?.Invoke(this, null);
-		}
+    public event EventHandler<object?>? RequestClose;
 
-		[RelayCommand]
-		public void Submit() {
+    public void Close() {
+        RequestClose?.Invoke(this, null);
+    }
 
-			new Database().WritePseudoName(_address, Pseudoname);
-			RequestClose?.Invoke(this, Pseudoname);
-		}
-	}
+    [RelayCommand]
+    public void Submit() {
+        new Database().WritePseudoName(_address, Pseudoname);
+        RequestClose?.Invoke(this, Pseudoname);
+    }
 }

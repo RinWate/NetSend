@@ -1,55 +1,54 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Irihi.Avalonia.Shared.Contracts;
 using NetSend.Core;
 using NetSend.Models;
 using NetSend.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Tasks;
 
-namespace NetSend.Dialogs {
-	public partial class SendByAddressDialogViewModel : ViewModelBase, IDialogContext {
-		public event EventHandler<object?>? RequestClose;
+namespace NetSend.Dialogs;
 
-		[ObservableProperty]
-		private string _message = string.Empty;
+public partial class SendByAddressDialogViewModel : ViewModelBase, IDialogContext {
+    [ObservableProperty]
+    private IPAddress _address = IPAddress.None;
 
-		[ObservableProperty]
-		private IPAddress _address = IPAddress.None;
+    [ObservableProperty]
+    private string _message = string.Empty;
 
-		public SendByAddressDialogViewModel(string message) {
-			Message = message;
-			Address = GetIpAddress();
-		}
+    public SendByAddressDialogViewModel(string message) {
+        Message = message;
+        Address = GetIpAddress();
+    }
 
-		[RelayCommand]
-		public async Task Send() {
+    public event EventHandler<object?>? RequestClose;
 
-			var recipients = new List<Recipient>() {
-				new Recipient("", Address)
-			};
+    public void Close() {
+        RequestClose?.Invoke(this, EventArgs.Empty);
+    }
 
-			var mainWindow = Global.GetMainWindow();
+    [RelayCommand]
+    public async Task Send() {
+        var recipients = new List<Recipient> {
+            new("", Address)
+        };
 
-			var sender = new Sender();
-			await sender.Send(Message, mainWindow, recipients);
+        var mainWindow = Global.GetMainWindow();
 
-			Close();
-		}
+        var sender = new Sender();
+        await sender.Send(Message, mainWindow, recipients);
 
-		public IPAddress GetIpAddress() {
-			var host = Dns.GetHostEntry(Dns.GetHostName());
-			foreach (var ip in host.AddressList) {
-				if (ip.AddressFamily == AddressFamily.InterNetwork) return ip;
-			}
-			return IPAddress.None;
-		}
+        Close();
+    }
 
-		public void Close() {
-			RequestClose?.Invoke(this, EventArgs.Empty);
-		}
-	}
+    public IPAddress GetIpAddress() {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+                return ip;
+        return IPAddress.None;
+    }
 }

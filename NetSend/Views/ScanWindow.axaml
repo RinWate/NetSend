@@ -1,44 +1,43 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
-		xmlns:ursa="https://irihi.tech/ursa"
+        xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
+        xmlns:ursa="https://irihi.tech/ursa"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400" Width="600" Height="400"
         x:Class="NetSend.ScanWindow"
-		x:DataType="vm:ScanWindowViewModel"
-		WindowStartupLocation="CenterScreen"
-		Icon="/Assets/avalonia-logo.ico"
+        x:DataType="vm:ScanWindowViewModel"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/avalonia-logo.ico"
         Title="Сканирование сети">
-	<Grid RowDefinitions="auto, *" 
-		  ColumnDefinitions="auto, auto, *, auto"
-		  Margin="5"
-		  ColumnSpacing="5"
-		  RowSpacing="5">
-		<Button Grid.Column="0"
-				Name="ScanButton"
-				Content="Сканировать"
-				Command="{Binding ScanCommand}"
-				CommandParameter="{Binding Text, ElementName=Mask}">
-		</Button>
-		<ursa:AutoCompleteBox Grid.Column="3"
-							  Name="Mask"
-							  Width="150"
-							  Watermark="Фильтр подсети..."
-							  Text="{Binding Filter}"
-							  IsEnabled="{Binding !IsScanning}"
-							  ItemsSource="{Binding Filters}"
-							  ToolTip.Tip="Подсеть, которая будет просканирована. В формате 255.255.255.0">
-		</ursa:AutoCompleteBox>
-		<TextBox Grid.Column="0"
-				 Grid.ColumnSpan="4"
-				 Grid.Row="1"
-				 IsReadOnly="True"
-				 Text="{Binding Log}"
-				 CaretIndex="{Binding Log.Length}"
-				 TextWrapping="Wrap"
-				 TextAlignment="Start"
-				 VerticalAlignment="Stretch"
-				 VerticalContentAlignment="Stretch"></TextBox>
-	</Grid>
+
+    <Grid RowDefinitions="auto, *"
+          ColumnDefinitions="auto, auto, *, auto"
+          Margin="5"
+          ColumnSpacing="5"
+          RowSpacing="5">
+        <Button Grid.Column="0"
+                Name="ScanButton"
+                Content="Сканировать"
+                Command="{Binding ScanCommand}"
+                CommandParameter="{Binding Text, ElementName=Mask}" />
+        <ursa:AutoCompleteBox Grid.Row="0" Grid.Column="3"
+                              Name="Mask"
+                              Width="150"
+                              Watermark="Фильтр подсети..."
+                              Text="{Binding Filter}"
+                              IsEnabled="{Binding !IsScanning}"
+                              ItemsSource="{Binding Filters}"
+                              ToolTip.Tip="Подсеть, которая будет просканирована. В формате 255.255.255.0" />
+        <TextBox Grid.Column="0"
+                 Grid.ColumnSpan="4"
+                 Grid.Row="1"
+                 IsReadOnly="True"
+                 Text="{Binding Log}"
+                 CaretIndex="{Binding Log.Length}"
+                 TextWrapping="Wrap"
+                 TextAlignment="Start"
+                 VerticalAlignment="Stretch"
+                 VerticalContentAlignment="Stretch" />
+    </Grid>
 </Window>

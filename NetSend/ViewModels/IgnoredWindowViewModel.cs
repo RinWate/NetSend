@@ -1,37 +1,32 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NetSend.Core;
 using NetSend.Models;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Linq;
 
 namespace NetSend.ViewModels;
 
 public partial class IgnoredWindowViewModel : ViewModelBase {
+    [ObservableProperty]
+    private ObservableCollection<IgnoredRecipient> _ignoredRecipients = new();
 
-	[ObservableProperty]
-	private ObservableCollection<IgnoredRecipient> _ignoredRecipients = new ObservableCollection<IgnoredRecipient>();
-	
-	[ObservableProperty]
-	private List<IgnoredRecipient> _selectedRecipients = new List<IgnoredRecipient>();
+    [ObservableProperty]
+    private List<IgnoredRecipient> _selectedRecipients = new();
 
-	public IgnoredWindowViewModel() {
-		IgnoredRecipients = Global.IgnoredRecipients;
-	}
+    public IgnoredWindowViewModel() {
+        IgnoredRecipients = Global.IgnoredRecipients;
+    }
 
-	[RelayCommand]
-	private void ClearIgnoredRecipients() {
-		new Database().RemoveAllIgnoredRecipients();
-	}
+    [RelayCommand]
+    private void ClearIgnoredRecipients() {
+        new Database().RemoveAllIgnoredRecipients();
+    }
 
-	[RelayCommand]
-	private void RemoveFromIgnore() {
-		new Database().RemoveRecipientsFromIgnore(SelectedRecipients);
-		Settings.LoadIgnoredRecipients();
-		IgnoredRecipients = Global.IgnoredRecipients;
-	}
-
+    [RelayCommand]
+    private void RemoveFromIgnore() {
+        new Database().RemoveRecipientsFromIgnore(SelectedRecipients);
+        Settings.LoadIgnoredRecipients();
+        IgnoredRecipients = Global.IgnoredRecipients;
+    }
 }

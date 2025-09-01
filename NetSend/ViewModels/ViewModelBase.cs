@@ -1,12 +1,12 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace NetSend.ViewModels {
-	public partial class ViewModelBase : ObservableObject {
-		protected Window? window;
+namespace NetSend.ViewModels;
 
-		public ViewModelBase(Window? parent = null) {
-			window = parent;
-		}
-	}
+public class ViewModelBase : ObservableObject {
+    protected Window? window;
+
+    public ViewModelBase(Window? parent = null) {
+        window = parent;
+    }
 }
