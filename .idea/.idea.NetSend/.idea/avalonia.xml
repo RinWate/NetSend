@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="NetSend/Dialogs/ConfirmSendDialog.axaml" value="NetSend/NetSend.csproj" />
+        <entry key="NetSend/Views/AboutWindow.axaml" value="NetSend/NetSend.csproj" />
+        <entry key="NetSend/Views/AccessErrorWindow.axaml" value="NetSend/NetSend.csproj" />
+        <entry key="NetSend/Views/MainWindow.axaml" value="NetSend/NetSend.csproj" />
+        <entry key="NetSend/Views/MessageHistoryWindow.axaml" value="NetSend/NetSend.csproj" />
+        <entry key="NetSend/Views/ScanWindow.axaml" value="NetSend/NetSend.csproj" />
+        <entry key="NetSend/Views/SettingsWindow.axaml" value="NetSend/NetSend.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

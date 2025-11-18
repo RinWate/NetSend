@@ -4,7 +4,7 @@
         xmlns:vm="clr-namespace:NetSend.ViewModels;assembly=NetSend"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600" Width="600" Height="600"
-        x:Class="NetSend.MessageHistoryWindow"
+        x:Class="NetSend.Views.MessageHistoryWindow"
         x:DataType="vm:MessageHistoryWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         WindowStartupLocation="CenterScreen"

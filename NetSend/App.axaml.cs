@@ -21,7 +21,7 @@ public class App : Application {
 
             var isCanRun = new Database().CheckAccess();
             if (!isCanRun) {
-                var errorWindow = new AccessErrorWindow();
+                var errorWindow = new Views.AccessErrorWindow();
                 desktop.MainWindow = errorWindow;
                 errorWindow.Show();
                 return;

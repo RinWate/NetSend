@@ -8,14 +8,16 @@ using NetSend.Models;
 namespace NetSend;
 
 public static class Global {
-    public static readonly string[] TITLES =
-        { @"Режим ""Глашатай""", "Наведём суету?", "Орём во весь голос?", "Устроим спам?", "У меня окошко вылезло..." };
+    private static readonly string[] TITLES =
+        { @"Режим ""Глашатай""", "Наведём суету?", "Орём во весь голос?", "Устроим спам?", "У меня окошко вылезло...", "Что это мы тут делаем?" };
 
     public static readonly string VERSION = "v 1.4";
     public static ObservableCollection<Recipient> Recipients { get; set; } = new();
     public static ObservableCollection<IgnoredRecipient> IgnoredRecipients { get; set; } = new();
     public static string StatusString { get; set; } = string.Empty;
 
+    private static int _lastIndex;
+    
     public static Window GetMainWindow() {
         var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow
@@ -25,6 +27,10 @@ public static class Global {
 
     public static string GetRandomTitle() {
         var randomIndex = new Random().Next(TITLES.Length - 1);
+        while (randomIndex == _lastIndex) {
+            randomIndex = new Random().Next(TITLES.Length - 1);
+        }
+        _lastIndex = randomIndex;
         return TITLES[randomIndex];
     }
 }

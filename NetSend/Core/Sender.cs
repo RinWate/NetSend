@@ -12,7 +12,7 @@ public class Sender {
     public async Task Send(string message, Window parent, List<Recipient>? recipients = null) {
         var errors = new List<string>();
         var tasks = new List<Task>();
-        var long_operation = new LongProcessWindow();
+        var long_operation = new Views.LongProcessWindow();
         long_operation.DataContext = new LongProcessWindowViewModel("Отправка...");
         _ = long_operation.ShowDialog(parent);
 

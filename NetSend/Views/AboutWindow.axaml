@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
         Width="500" Height="300"
-        x:Class="NetSend.AboutWindow"
+        x:Class="NetSend.Views.AboutWindow"
         x:DataType="vm:AboutWindowViewModel"
         Title="AboutWindow">
 
@@ -15,14 +15,12 @@
           RowSpacing="5"
           ShowGridLines="True"
           Margin="5">
-
         <StackPanel Grid.Column="0"
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Center">
             <Button Content="Закрыть" Command="{Binding CloseWindowCommand}" />
         </StackPanel>
-
     </Grid>
 
 </Window>

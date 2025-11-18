@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using NetSend.ViewModels;
 
-namespace NetSend;
+namespace NetSend.Views;
 
 public partial class AboutWindow : Window {
     public AboutWindow() {

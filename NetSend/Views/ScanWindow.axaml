@@ -5,7 +5,7 @@
         xmlns:ursa="https://irihi.tech/ursa"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400" Width="600" Height="400"
-        x:Class="NetSend.ScanWindow"
+        x:Class="NetSend.Views.ScanWindow"
         x:DataType="vm:ScanWindowViewModel"
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/avalonia-logo.ico"

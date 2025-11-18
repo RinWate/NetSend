@@ -123,7 +123,7 @@ public partial class MainWindowViewModel : ViewModelBase {
 
     [RelayCommand]
     private async Task Scan() {
-        var newScan = new ScanWindow();
+        var newScan = new Views.ScanWindow();
 
         var mainWindow = Global.GetMainWindow();
         await newScan.ShowDialog(mainWindow);
@@ -194,14 +194,14 @@ public partial class MainWindowViewModel : ViewModelBase {
 
     [RelayCommand]
     private void OpenHistory() {
-        var newWindow = new MessageHistoryWindow(this);
+        var newWindow = new Views.MessageHistoryWindow(this);
         var mainWindow = Global.GetMainWindow();
         newWindow.Show(mainWindow);
     }
 
     [RelayCommand]
     private async Task OpenAbout() {
-        var newWindow = new AboutWindow();
+        var newWindow = new Views.AboutWindow();
 
         var mainWindow = Global.GetMainWindow();
         await newWindow.ShowDialog(mainWindow);

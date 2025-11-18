@@ -5,7 +5,7 @@
         xmlns:ursa="https://irihi.tech/ursa"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="100" Width="250" Height="100"
-        x:Class="NetSend.LongProcessWindow"
+        x:Class="NetSend.Views.LongProcessWindow"
         x:DataType="vm:LongProcessWindowViewModel"
         WindowStartupLocation="CenterOwner"
         CanResize="False"
